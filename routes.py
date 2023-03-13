@@ -684,10 +684,11 @@ def searchStud_theory():
          division = request.form.get('division')
          date = request.form.get('date')
          subject = request.form.get('subject')
+         timeslot = request.form.get('timeslot')
          batch = request.form.getlist('batch')
          # print(batch)
          bt = ', '.join(batch)
-         searchStud_theory.atinfo = (year,division,date,subject,batch)
+         searchStud_theory.atinfo = (year,division,date,subject,timeslot,batch)
          data = classRecordDBS.getData_batchvise(year,division,batch)
          data.sort()
          total_data = (searchStud_theory.atinfo, data,bt)
@@ -706,6 +707,7 @@ def addAttendance():
          present = request.form.getlist('present')
          # print(session['roll'])
          addAttendance.addAttendance_theory(searchStud_theory.atinfo,present,session['roll'])
+         addAttendance.addattendance_daily(searchStud_theory.atinfo,present,session['roll'],"Theory")
       return redirect(url_for('theoryAttendance'))
    return redirect(url_for('login'))
 
@@ -729,9 +731,10 @@ def searchstudents_practical():
          division = request.form.get('division')
          date = request.form.get('date')
          subject = request.form.get('subject')
+         timeslot = request.form.get('timeslot')
          batch = request.form.getlist('batch')
          # print(batch)
-         searchstudents_practical.atinfo = (year,division,date,subject,batch)
+         searchstudents_practical.atinfo = (year,division,date,subject,timeslot,batch)
          data = classRecordDBS.getData_batchvise(year,division,batch)
          data.sort()
          total_data = (searchstudents_practical.atinfo, data)
@@ -751,8 +754,37 @@ def addAttendance__practical():
          # print(session['roll'])
          # print(searchstudents_practical.atinfo)
          addAttendance.addAttendance_practical(searchstudents_practical.atinfo,present,session['roll'])
+         addAttendance.addattendance_daily(searchstudents_practical.atinfo,present,session['roll'],"Practical")
       return redirect(url_for('practicalAttendance'))
    return redirect(url_for('login'))
+
+@app.route('/dailyreport')
+def dailyreport():
+   if 'loggedin' in session and session['authority'] == 'Faculty': 
+      return render_template('dailyreport.html')
+   return redirect(url_for('login'))
+
+@app.route('/dailyreporttable',methods=['GET', 'POST'])
+def dailyreporttable():
+   if 'loggedin' in session and session['authority'] == 'Faculty': 
+      import dailyreport
+      year = request.form.get('year')
+      div = request.form.get('division')
+      date = request.form.get('date')
+      data = dailyreport.dailyreport(year,div,date)
+      dailyreporttable.atinfo = (year,div,date)
+      return render_template('dailyreporttable.html',data=data)
+   return redirect(url_for('login'))
+
+@app.route('/updatedailyreport',methods=['GET', 'POST'])
+def updatedailyreport():
+   if 'loggedin' in session and session['authority'] == 'Faculty': 
+      import dailyreport
+      reamrks = request.form.getlist('remark')
+      dailyreport.updatedailyreport(dailyreporttable.atinfo,reamrks)
+      return redirect(url_for('dailyreport'))
+   return redirect(url_for('login'))
+
 
 if __name__ == '__main__':
       app.run(host='172.16.9.12', port=4000, debug=True)

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Class Attendance</title>
+    <title>Dailty Report</title>
     <meta charset="utf-8" />
     <!-- Mobile Specific Metas -->
     <meta
@@ -64,6 +64,8 @@
         outline-width: 0;
       }
     </style>
+    <link rel="stylesheet" href="css/bootstrap.css" />
+
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
@@ -112,7 +114,7 @@
           </li>
           <li class="nav-item dropdown">
             <a
-              class="nav-link dropdown-toggle"
+              class="nav-link dropdown-toggle "
               href="#"
               id="navbarDropdownMenuLink"
               data-toggle="dropdown"
@@ -133,7 +135,7 @@
 
           <li class="nav-item dropdown">
             <a
-              class="nav-link dropdown-toggle active"
+              class="nav-link dropdown-toggle"
               href="#"
               id="navbarDropdownMenuLink"
               data-toggle="dropdown"
@@ -161,6 +163,7 @@
               >
             </div>
           </li>
+
           <li class="nav-item">
             <a class="nav-link active" href="{{ url_for('dailyreport') }}"
               >Daily Report</a
@@ -171,79 +174,65 @@
       </div>
     </nav>
 
-    <!-- navbar ends -->
-
-    <!-- form starts -->
-
+    <!-- nav ends -->
+  <body>
+    
     <div class="row d-flex justify-content-center">
-      <div class="col-xl-7 col-lg-8 col-md-9 col-11 text-center">
+      <div class="col-xl-5 col-lg-8 col-md-9 col-11 text-center">
         <div class="card">
-          <h5 class="text-center mb-4">Display Attendance By Class</h5>
+          <h5 class="text-center mb-4">Daily Report</h5>
+
           <form
-            id="f"
-            action="{{ url_for('classTable') }}"
-            method="POST"
-            enctype="multipart/form-data"
-          >
-            <div class="row">
-              <div class="col">
-                <div class="form-group text-left">
-                  <label for="year">Year</label>
-                  <select name="year" id="year" class="form-control">
-                    <option value="SY">SY</option>
-                    <option value="TY">TY</option>
-                    <option value="BTECH">B.Tech</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col">
-                <div class="form-group text-left">
-                  <label for="division">Division</label>
-                  <select name="division" id="division" class="form-control">
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col">
-                <div class="form-group text-left">
-                  <label for="sdate">Start Date</label>
-                  <input
-                    type="date"
-                    name="sdate"
-                    class="form-control"
-                    required
-                  />
-                </div>
-              </div>
-              <div class="col">
-                <div class="form-group text-left">
-                  <label for="edate">End Date</label>
-                  <input
-                    type="date"
-                    name="edate"
-                    class="form-control"
-                    required
-                  />
-                </div>
-              </div>
-            </div>
-
-            <button
-              id="submitForm"
-              type="submit"
-              class="btn btn-primary btn-block rounded-pill shadow-sm"
+              id="f"
+              action="{{ url_for('dailyreporttable') }}"
+              method="POST"
+              enctype="multipart/form-data"
             >
-              Confirm
-            </button>
+              <div class="form-group row">
+                <div class="col">
+                  <div class="form-group text-left">
+                    <label for="year">Year</label>
+                    <select name="year" id="year" class="form-control">
+                      <option value="SY">SY</option>
+                      <option value="TY">TY</option>
+                      <option value="BTECH">B.Tech</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-group text-left">
+                    <label for="division">Division</label>
+                    <select name="division" id="division" class="form-control">
+                      <option value="A">A</option>
+                      <option value="B">B</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <div class="col">
+                  <div class="form-group text-left">
+                    <label for="sdate">Date</label>
+                    <input
+                      type="date"
+                      name="date"
+                      class="form-control"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+              
+              <button
+                id="submitForm"
+                type="submit"
+                class="btn btn-primary btn-block rounded-pill shadow-sm">
+                Confirm
+              </button>
           </form>
         </div>
       </div>
     </div>
-
-    <!-- form ends -->
   </body>
 </html>
