@@ -706,7 +706,6 @@ def defaulterData(year,division,sdate,edate,defaulter):
                     sql = 'SELECT {} FROM `{}` WHERE division = "{}"'.format(i,j,division)
                     btech.execute(sql)
                     data = btech.fetchall()
-                    # print(data)
                     if data[0][0] != -1:
                         total[sname] +=1
                         print(data)
@@ -722,7 +721,6 @@ def defaulterData(year,division,sdate,edate,defaulter):
                 if len(su) == 0:
                     for l in range(len(total['roll'])):
                         su.append(0)
-                # print('su',su)
 
                 for k in range(len(total['roll'])):
                     if su[k] ==-1:
