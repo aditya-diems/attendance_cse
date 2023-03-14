@@ -109,27 +109,25 @@ import pickle
 
 
 
-# f = 'fcinfo.pkl'
-f = 'subinfo.pkl'
+# # f = 'fcinfo.pkl'
+# f = 'subinfo.pkl'
 
-subs = {'Theory': {'BTECH': ['Software Engineering', 'Big Data Analytics', 'Cloud Computing', 'Blockchain Technology', 'Full Stack Development', 'System Administration'],
-                    'TY': ['Compiler Design', 'Computer Networks', 'Machine Learning', 'Geographic Information System', 'Internet of Things', 'Embedded Systems', 'Development Engineering', 'Employability and Skill Development', 'Consumer Behaviour', 'Competitive Programming'],
-                      'SY': [], 'FY': []}, 
-        'Practical': {'BTECH': ['Big Data Analytics (PR)', 'Cloud Computing (PR)', 'Full Stack Development (PR)', 'System Administration (PR)'], 
-                        'TY': ['Computer Networks (PR)', 'Machine Learning (PR)',  'Internet of Things (PR)',  'Competitive Programming (PR)', 'Mini Project (02)'], 
-                        'SY': [], 'FY': []}}
-fc = []
-# # # for reading 
-frobj = open(f,'rb')
-ff = pickle.load(frobj)
-# print(ff['Practical']['TY'])
-# fwobj = open(f,'wb')
-# pickle.dump(subs,fwobj)
+# subs = {'Theory': {'BTECH': ['Software Engineering', 'Big Data Analytics', 'Cloud Computing', 'Blockchain Technology', 'Full Stack Development', 'System Administration'],
+#                     'TY': ['Compiler Design', 'Computer Networks', 'Machine Learning', 'Geographic Information System', 'Internet of Things', 'Embedded Systems', 'Development Engineering', 'Employability and Skill Development', 'Consumer Behaviour', 'Competitive Programming'],
+#                       'SY': [], 'FY': []}, 
+#         'Practical': {'BTECH': ['Big Data Analytics (PR)', 'Cloud Computing (PR)', 'Full Stack Development (PR)', 'System Administration (PR)'], 
+#                         'TY': ['Computer Networks (PR)', 'Machine Learning (PR)',  'Internet of Things (PR)',  'Competitive Programming (PR)', 'Mini Project (02)'], 
+#                         'SY': [], 'FY': []}}
+# fc = []
+# # # # for reading 
+# frobj = open(f,'rb')
+# ff = pickle.load(frobj)
+# # print(ff['Practical']['TY'])
+# # fwobj = open(f,'wb')
+# # pickle.dump(subs,fwobj)
  
 
-print(ff)
-
-
+# print(ff)
 
 
 

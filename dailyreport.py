@@ -11,7 +11,7 @@ def dailyreport(year,div,date):
     total = {}
     total['default'] = [year,div,date]
     tableName = date+'-'+year+'-'+div
-
+    total['pr'] = []
     try:
         sql = "SHOW COLUMNS FROM `{}`".format(tableName)
         dcse_cur.execute(sql)
@@ -36,7 +36,7 @@ def dailyreport(year,div,date):
         prcount = prcount -abcount
         total['pr'] = [prcount,abcount]
 
-        sql = "SELECT sphone,pphone FROM `{}`".format(year)
+        sql = "SELECT sphone,pphone FROM `{}` WHERE `DIVISION`='{}'".format(year,div)
         cur.execute(sql)
         phone = cur.fetchall()
         

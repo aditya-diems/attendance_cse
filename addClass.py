@@ -32,7 +32,6 @@ def addInSubject(roll,name,year,div):
          values = (str(roll),name,div)
          ty.execute(sql,values)
          at_ty.commit()
-      at_ty.close()
 
    elif year == 'SY':
       for i in subs_btech['Theory'][year]:
@@ -71,6 +70,7 @@ def addInPractical(roll,name,year,div,batch):
          values = (str(roll),name,div,batch)
          tyP.execute(sql,values)
          ap_ty.commit()
+
       ap_ty.close()
 
    elif year == 'SY':
