@@ -679,6 +679,7 @@ def theoryAttendance():
 def searchStud_theory():
    if 'loggedin' in session and session['authority'] == 'Faculty': 
       import classRecordDBS
+      import dailyreport
       if request.method == 'POST':
          year = request.form.get('year')
          division = request.form.get('division')
@@ -690,8 +691,9 @@ def searchStud_theory():
          bt = ', '.join(batch)
          searchStud_theory.atinfo = (year,division,date,subject,timeslot,batch)
          data = classRecordDBS.getData_batchvise(year,division,batch)
+         msg = dailyreport.check_session(year,division,date,timeslot)
          data.sort()
-         total_data = (searchStud_theory.atinfo, data,bt)
+         total_data = (searchStud_theory.atinfo, data,bt,msg)
          roll = []
          for i in data:
             roll.append(i[0])
@@ -726,6 +728,8 @@ def practicalAttendance():
 def searchstudents_practical():
    if 'loggedin' in session and session['authority'] == 'Faculty': 
       import classRecordDBS
+      import dailyreport
+
       if request.method == 'POST':
          year = request.form.get('year')
          division = request.form.get('division')
@@ -736,8 +740,9 @@ def searchstudents_practical():
          # print(batch)
          searchstudents_practical.atinfo = (year,division,date,subject,timeslot,batch)
          data = classRecordDBS.getData_batchvise(year,division,batch)
+         msg = dailyreport.check_session_practical(year,division,date,batch,timeslot)
          data.sort()
-         total_data = (searchstudents_practical.atinfo, data)
+         total_data = (searchstudents_practical.atinfo, data,msg)
          roll = []
          for i in data:
             roll.append(i[0])
