@@ -98,20 +98,22 @@ def subjectAttendance_theory (year,division,subject,sdate,edate):
                 for pp in data:
                     temp.append(pp[0])
                 total[i] = []
-                if 1 in temp:
+                # print(i,temp)
+                print(temp)
+                if '1' in temp or 1 in temp:
                     for cc in data:
-                        if cc[0] == -1:
+                        if cc[0] == '-1' or cc[0] ==-1:
                             total[i].append((0,))
                         else:
                             total[i].append(cc)
                     new_dates.append(i)
-                print(total[i])
                 # if data[0][0] != -1:
                 #     total[i] = data
                 #     new_dates.append(i)
             except:
                 print('except')
 
+        # print(total)
         total['dates'] = new_dates
 
         for i in range(len(total['dates'])):
@@ -845,6 +847,7 @@ def defaulterData(year,division,sdate,edate,defaulter):
             row.append(list(i))
         total['roll'] = row
         total['subs'] = []
+        sess_count=[0 for i in range(len(total['roll'])) ]
         
         for j in subs['Theory'][year]:
             ll = []
@@ -883,7 +886,7 @@ def defaulterData(year,division,sdate,edate,defaulter):
                         total['roll'][k].append(0)
                     else:
                         total['roll'][k].append(su[k])
-        
+        # print(sess_count)
         # For practical-------------------------------------------
         for j in subs['Practical'][year]:
             ll = []
@@ -904,7 +907,6 @@ def defaulterData(year,division,sdate,edate,defaulter):
                     data = tyP.fetchall()
                     for k in range(len(data)):
                         data[k] = data[k][0]
-
                     # for sessions happend storng in per subject list in total 
                     for c in range(len(data)):
                         if len(total[sname]) != len(data):
@@ -939,7 +941,6 @@ def defaulterData(year,division,sdate,edate,defaulter):
                     else:
                         total['roll'][k].append(su[k])
            
-        sess_count=[0 for i in range(len(total['roll'])) ]
         for j in subs['Theory'][year]:
             ss = j.split()
             sname = ''
@@ -947,6 +948,8 @@ def defaulterData(year,division,sdate,edate,defaulter):
                 sname+=i[0]
             for kk in range(len(sess_count)):
                 sess_count[kk] += total[sname]
+            # print(sname,total[sname])
+        # print(sess_count[20])
 
         for j in subs['Practical'][year]:
             ss = j.split()
@@ -958,16 +961,12 @@ def defaulterData(year,division,sdate,edate,defaulter):
                 else:
                     sname+=i[0]
             for kk in range(len(total['roll'])):
-                print(total[sname])
                 sess_count[kk] += total[sname][kk]
-                
-
         # new -------------------------
         for i in range(len(total['roll'])):
             # print(total['roll'][i])
             for jcb in range(3,len(total['roll'][i])):
                 if total['roll'][i][jcb] <0:
-                    # print(total['roll'][i][jcb])
                     sess_count[i] += total['roll'][i][jcb]
             # print(sess_count[i])
 

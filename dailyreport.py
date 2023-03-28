@@ -40,8 +40,8 @@ def dailyreport(year,div,date):
         cur.execute(sql)
         phone = cur.fetchall()
         
-        total['columns'].insert(9,'Student Phone')
         total['columns'].insert(9,'Parent Phone')
+        total['columns'].insert(9,'Student Phone')
         
         for i in range(len(total['data'])):
             total['data'][i] = list(total['data'][i])
@@ -67,7 +67,7 @@ def updatedailyreport(info,remark):
     date = info[2]
     tableName = date+'-'+year+'-'+div
 
-    sql = 'SELECT ROLL_NO FROM {}'.format(info[0])
+    sql = 'SELECT ROLL_NO FROM {} WHERE division="{}"'.format(info[0],div)
     cur.execute(sql)
     temp = cur.fetchall()
     roll = []

@@ -391,7 +391,7 @@ def studenttAttendance_defaulter(roll,year) :
                 sql = 'SELECT {} FROM `{}` WHERE roll = "{}"'.format(j,i,roll)
                 ty.execute(sql)
                 data = ty.fetchall()
-                # print(i,j,data)
+                print(i,j)
                 if data[0][0] != -1:
                     attended+=data[0][0]
                     total[sname] +=1  
