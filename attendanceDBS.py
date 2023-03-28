@@ -708,16 +708,19 @@ def defaulterData(year,division,sdate,edate,defaulter):
                     sql = 'SELECT {} FROM `{}` WHERE division = "{}"'.format(i,j,division)
                     btech.execute(sql)
                     data = btech.fetchall()
-                    if data[0][0] != -1:
-                        total[sname] +=1
-                        print(data)
+                    temp = []
+                    for cc in data:
+                        temp.append(cc[0])  
+                    if any(tenz >0 for tenz in temp):
                         for k in range(len(data)):
                             data[k] = data[k][0]
                         ll.append(data)
+                        if j != 'other attendance':
+                            total[sname] +=1
                 except:
                     print('except')
             
-            if total[sname] != 0:
+            if total[sname] != 0 or j == 'other attendance':
                 total['subs'].append(sname)
                 su = [sum(x) for x in zip(*ll)]
                 if len(su) == 0:
@@ -864,16 +867,18 @@ def defaulterData(year,division,sdate,edate,defaulter):
                     # print(data)
                     temp = []
                     for cc in data:
-                        temp.append(cc[0])  
-                    if 1 in temp:
-                        total[sname] +=1
+                        temp.append(cc[0])
+                           
+                    if any(tenz >0 for tenz in temp):
                         for k in range(len(data)):
                             data[k] = data[k][0]
                         ll.append(data)
+                        if j != 'other attendance':
+                            total[sname] +=1
                 except:
                     print('except')
 
-            if total[sname] != 0:
+            if total[sname] != 0 or j == 'other attendance':
                 total['subs'].append(sname)
                 su = [sum(x) for x in zip(*ll)]
                 if len(su) == 0:
@@ -1025,17 +1030,20 @@ def defaulterData(year,division,sdate,edate,defaulter):
                     sql = 'SELECT {} FROM `{}` WHERE division = "{}"'.format(i,j,division)
                     sy.execute(sql)
                     data = sy.fetchall()
-                    print(data)
-                    if data[0][0] != -1:
-                        total[sname] +=1
-                        print(data)
+                    temp = []
+                    for cc in data:
+                        temp.append(cc[0])
+                           
+                    if any(tenz >0 for tenz in temp):
                         for k in range(len(data)):
                             data[k] = data[k][0]
                         ll.append(data)
+                        if j != 'other attendance':
+                            total[sname] +=1
                 except:
                     print('except')
 
-            if total[sname] != 0:
+            if total[sname] != 0 or j == 'other attendance':
                 total['subs'].append(sname)
                 su = [sum(x) for x in zip(*ll)]
                 if len(su) == 0:

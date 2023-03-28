@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Deffaulter Table</title>
+    <title>Add student</title>
     <meta charset="utf-8" />
     <!-- Mobile Specific Metas -->
     <meta
@@ -64,7 +64,7 @@
         outline-width: 0;
       }
     </style>
-    <!-- <link rel="stylesheet" href="css/bootstrap.css"/> -->
+    <link rel="stylesheet" href="css/bootstrap.css" />
 
     <link
       rel="stylesheet"
@@ -87,7 +87,6 @@
       integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
       crossorigin="anonymous"
     ></script>
-    <script type="text/javascript" src="static/js/table2excel.js"></script>
   </head>
 
   <body class="form-v10">
@@ -136,7 +135,7 @@
 
           <li class="nav-item dropdown">
             <a
-              class="nav-link dropdown-toggle active"
+              class="nav-link dropdown-toggle"
               href="#"
               id="navbarDropdownMenuLink"
               data-toggle="dropdown"
@@ -170,89 +169,103 @@
             >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('other') }}">Other</a>
+            <a class="nav-link active" href="{{ url_for('other') }}">Other</a>
           </li>
         </ul>
+
         <a class="nav-link" href="{{ url_for('profile') }}">Profile</a>
       </div>
     </nav>
 
     <!-- navbar ends -->
 
-    <!-- table starts   -->
     <div class="row d-flex justify-content-center">
-      <div class="col-xl-11 col-lg-8 col-md-9 col-11">
-        <div class="card text-center">
-          <h4 class="text-center mb-4">Display Defaulter</h4>
-          <div class="row">
-            <div class="col">
-              <h5>Year : {{data['pre'][0]}}</h5>
-            </div>
-            <div class="col">
-              <h5>Division : {{data['pre'][1]}}</h5>
-            </div>
+      <div class="col-xl-8 col-lg-8 col-md-9 col-11 text-center">
+        <div class="card">
+          <div class="text-center">
+            <h3>Other Attendance Info</h3>
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h5 class="card-title">Year - {{data[0][0]}}</h5>
+                </div>
+                <div class="col">
+                  <h5 class="card-title">Division - {{data[0][1]}}</h5>
+                </div>
+                <div class="col">
+                  <h5>Date - {{data[0][2]}}</h5>
+                </div>
+              </div>
 
-            <div class="col">
-              <h5>From : <b>{{data['pre'][2]}}</b></h5>
-            </div>
-            <div class="col">
-              <h5>To : <b>{{data['pre'][3]}}</b></h5>
-            </div>
-            <div class="col">
-              <h5>Defaulter Percentage : <b>{{data['defaulter']}}</b></h5>
-            </div>
-            <div class="col">
-              <button
-                onclick="tableToExcel()"
-                type="button"
-                class="btn btn-success"
-              >
-                Export to Excel
-              </button>
+              <div class="row">
+                <div class="col">
+                  <h5>Subject - {{data[0][3]}}</h5>
+                </div>
+
+                <div class="col">
+                  <h5>Batch - {{data[2]}}</h5>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col">
+                  <h5 style="color: red">{{data[3]}}</h5>
+                </div>
+              </div>
             </div>
           </div>
 
-          <table
-            class="table table-responsive table-bordered"
-            style="height: 500px"
+          <form
+            id="f"
+            action="{{url_for('addOtherAttendance')}}"
+            onsubmit="return confirm('Submit atttendance for \nYear={{data[0][0]}} \nDivision={{data[0][1]}} \nDate={{data[0][2]}} \nSubject={{data[0][3]}} \nBatch - {{data[0][4]}}');"
+            method="POST"
+            enctype="multipart/form-data"
           >
-            <thead class="thead-dark" style="position: sticky; top: 0">
-              <tr>
-                <th scope="col">ROLL NO</th>
-                <th scope="col">NAME</th>
-                <th scope="col">DIV</th>
-                {% for i in data['subs'] %}
-                <th>{{i}}</th>
+            <!-- table -->
+            <table class="table text-left table-bordered" style="height: 500px">
+              <thead class="thead-dark">
+                <tr>
+                  <th scope="col">ROLL NO</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Year</th>
+                  <th scope="col">DIVISION</th>
+                  <th scope="col">Batch</th>
+                  <th scope="col">Present</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in data[1] %}
+                <tr>
+                  {% for cell in row %}
+                  <td>{{cell}}</td>
+                  {% endfor %}
+                  <td>
+                    <div class="custom-control">
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="{{row[0]}}"
+                        name="count"
+                        value="0"
+                      />
+                      <label class="form-label" for="{{row[0]}}"></label>
+                    </div>
+                  </td>
+                </tr>
                 {% endfor %}
-              </tr>
-            </thead>
-            <tbody>
-              {% for row in data['roll'] %} {% if row[-1] < data['defaulter'] %}
-              <tr class="table-danger">
-                {% for cell in row %}
-                <td>{{cell}}</td>
-                {% endfor %}
-              </tr>
-              {% else %}
-              <tr>
-                {% for cell in row %}
-                <td>{{cell}}</td>
-                {% endfor %}
-              </tr>
-              {% endif %} {% endfor %}
-            </tbody>
-          </table>
+                <tr></tr>
+              </tbody>
+            </table>
+
+            <input
+              id="submitForm"
+              type="submit"
+              class="btn btn-primary btn-block rounded-pill shadow-sm"
+            />
+          </form>
         </div>
       </div>
     </div>
-
-    <!-- table ends -->
-
-    <script>
-      function tableToExcel() {
-        var table2excel = new Table2Excel();
-        table2excel.export(document.querySelectorAll("table.table"));
-      }
-    </script>
   </body>
 </html>
