@@ -13,7 +13,10 @@
       @media print {
         @page {
           margin: 0;
-          margin: 10mm 0mm 0mm 0mm;
+          margin: 10mm 0mm 5mm 0mm;
+        }
+        .remark {
+          width: 20%;
         }
       }
       table {
@@ -264,7 +267,7 @@
                     {% for cell in range(data['len']) %}
                     <td>{{row[cell]}}</td>
                     {% endfor %}
-                    <td>
+                    <td class="remark">
                       <input
                         type="text"
                         name="remark"
@@ -279,7 +282,7 @@
                     {% for cell in range(data['len']) %}
                     <td>{{row[cell]}}</td>
                     {% endfor %}
-                    <td>
+                    <td class="remark">
                       <input
                         type="text"
                         name="remark"
