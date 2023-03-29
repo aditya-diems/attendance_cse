@@ -13,8 +13,17 @@
       @media print {
         @page {
           margin: 0;
+          margin: 10mm 0mm 0mm 0mm;
         }
       }
+      table {
+        page-break-inside: auto;
+      }
+      tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+      }
+
       body {
         color: #000;
         overflow-x: hidden;
