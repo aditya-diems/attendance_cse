@@ -720,7 +720,7 @@ def defaulterData(year,division,sdate,edate,defaulter):
                 except:
                     print('except')
             
-            if total[sname] != 0 or j == 'other attendance':
+            if total[sname] != 0 or 'other attendance' in j.lower():
                 total['subs'].append(sname)
                 su = [sum(x) for x in zip(*ll)]
                 if len(su) == 0:
@@ -878,7 +878,7 @@ def defaulterData(year,division,sdate,edate,defaulter):
                 except:
                     print('except')
 
-            if total[sname] != 0 or j == 'other attendance':
+            if total[sname] != 0 or 'other attendance' in j.lower():
                 total['subs'].append(sname)
                 su = [sum(x) for x in zip(*ll)]
                 if len(su) == 0:
@@ -1043,7 +1043,7 @@ def defaulterData(year,division,sdate,edate,defaulter):
                 except:
                     print('except')
 
-            if total[sname] != 0 or j == 'other attendance':
+            if total[sname] != 0 or 'other attendance' in j.lower():
                 total['subs'].append(sname)
                 su = [sum(x) for x in zip(*ll)]
                 if len(su) == 0:

@@ -296,7 +296,7 @@
                     class="form-control"
                     required
                   >
-                    {% for i in data['Theory'] %} {% if i == 'other attendance'
+                    {% for i in data['Theory'] %} {% if 'other attendance' in i.lower()
                     %}
                     <option value="{{i}}">{{i}}</option>
                     {% endif %} {% endfor %}
