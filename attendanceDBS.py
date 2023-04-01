@@ -820,6 +820,8 @@ def defaulterData(year,division,sdate,edate,defaulter):
             try:
                 percentage = (cnt/sess_count[i])*100
                 percentage = round(percentage,2)
+                if percentage > 100:
+                    percentage = 100.0
             except:
                 print('division error')
             
@@ -988,6 +990,8 @@ def defaulterData(year,division,sdate,edate,defaulter):
             try:
                 percentage = (cnt/sess_count[i])*100
                 percentage = round(percentage,2)
+                if percentage > 100:
+                    percentage = 100.0
             except:
                 print('division error')
             
@@ -1145,6 +1149,8 @@ def defaulterData(year,division,sdate,edate,defaulter):
             try:
                 percentage = (cnt/sess_count[i])*100
                 percentage = round(percentage,2)
+                if percentage > 100:
+                    percentage = 100.0
             except:
                 print('division error')
             
