@@ -710,12 +710,13 @@ def defaulterData(year,division,sdate,edate,defaulter):
                     data = btech.fetchall()
                     temp = []
                     for cc in data:
-                        temp.append(cc[0])  
+                        temp.append(cc[0])
+                           
                     if any(tenz >0 for tenz in temp):
                         for k in range(len(data)):
                             data[k] = data[k][0]
                         ll.append(data)
-                        if j != 'other attendance':
+                        if 'other attendance' not in j.lower():
                             total[sname] +=1
                 except:
                     print('except')
@@ -809,19 +810,31 @@ def defaulterData(year,division,sdate,edate,defaulter):
             for kk in range(len(total['roll'])):
                 # print(total[sname])
                 sess_count[kk] += total[sname][kk]
+        
+        for i in range(len(total['roll'])):
+            # print(total['roll'][i])
+            for jcb in range(3,len(total['roll'][i])):
+                if total['roll'][i][jcb] <0:
+                    # print(total['roll'][i][jcb])
+                    sess_count[i] += total['roll'][i][jcb]
 
         # Session Attended
         for i in range(len(total['roll'])):
             # print(total['roll'][i])
             cnt = 0
             for j in range(3,len(total['roll'][i])):
-                cnt+=total['roll'][i][j]
+                if total['roll'][i][j] <0:
+                    cnt+=0
+                    total['roll'][i][j] = 0
+                else:
+                    cnt+=total['roll'][i][j]
             percentage = 0
             try:
                 percentage = (cnt/sess_count[i])*100
                 percentage = round(percentage,2)
                 if percentage > 100:
                     percentage = 100.0
+                    # cnt = sess_count[i]
             except:
                 print('division error')
             
@@ -869,13 +882,13 @@ def defaulterData(year,division,sdate,edate,defaulter):
                     # print(data)
                     temp = []
                     for cc in data:
-                        temp.append(cc[0])
-                           
+                        temp.append(cc[0])  
+
                     if any(tenz >0 for tenz in temp):
                         for k in range(len(data)):
                             data[k] = data[k][0]
                         ll.append(data)
-                        if j != 'other attendance':
+                        if 'other attendance' not in j.lower():
                             total[sname] +=1
                 except:
                     print('except')
@@ -992,6 +1005,7 @@ def defaulterData(year,division,sdate,edate,defaulter):
                 percentage = round(percentage,2)
                 if percentage > 100:
                     percentage = 100.0
+                    # cnt = sess_count[i]
             except:
                 print('division error')
             
@@ -1042,7 +1056,7 @@ def defaulterData(year,division,sdate,edate,defaulter):
                         for k in range(len(data)):
                             data[k] = data[k][0]
                         ll.append(data)
-                        if j != 'other attendance':
+                        if 'other attendance' not in j.lower():
                             total[sname] +=1
                 except:
                     print('except')
@@ -1140,11 +1154,22 @@ def defaulterData(year,division,sdate,edate,defaulter):
                 sess_count[kk] += total[sname][kk]
                 
 
+        for i in range(len(total['roll'])):
+            # print(total['roll'][i])
+            for jcb in range(3,len(total['roll'][i])):
+                if total['roll'][i][jcb] <0:
+                    # print(total['roll'][i][jcb])
+                    sess_count[i] += total['roll'][i][jcb]
+
         # Session Attended
         for i in range(len(total['roll'])):
             cnt = 0
             for j in range(3,len(total['roll'][i])):
-                cnt+=total['roll'][i][j]
+                if total['roll'][i][j] <0:
+                    cnt+=0
+                    total['roll'][i][j] = 0
+                else:
+                    cnt+=total['roll'][i][j]
             percentage = 0
             try:
                 percentage = (cnt/sess_count[i])*100
