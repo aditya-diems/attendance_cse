@@ -3,9 +3,9 @@ import mysql.connector
 from datetime import date, timedelta
 import pickle
 import sys
-sys.path.append('D:/PRojects/college/attendance_app')
+sys.path.append('C:/Users/windows_10/Desktop/Super/attendance_cse')
 
-fs = 'D:/PRojects/college/attendance_app/subinfo.pkl'
+fs = 'C:/Users/windows_10/Desktop/Super/attendance_cse/subinfo.pkl'
 
 def studenttAttendance_theory(roll,year,subject):
     at_btech = mysql.connector.connect(user='root', password='', host='localhost', database='theory_btech')
@@ -387,7 +387,7 @@ def studenttAttendance_defaulter(roll,year) :
             for j in ss:
                 sname+=j[0]
             total[sname] = 0
-
+            # print(i)
             sql = "SHOW COLUMNS FROM `{}`".format(i)
             ty.execute(sql)
             col = ty.fetchall()
@@ -401,9 +401,9 @@ def studenttAttendance_defaulter(roll,year) :
                 sql = 'SELECT {} FROM `{}` WHERE roll = "{}"'.format(j,i,roll)
                 ty.execute(sql)
                 data = ty.fetchall()
-                print(i,j)
                 if data[0][0] != -1:
                     attended+=data[0][0]
+                    # print(i)
                     if 'other attendance' not in i:
                         total[sname] +=1
             if total[sname] != 0 or 'other attendance' in i:
