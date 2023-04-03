@@ -367,6 +367,7 @@ def studenttAttendance_defaulter(roll,year) :
                 percentage = 100
                 session_attended = session_happend
         except Exception as e:
+            percentage=0
             print(e)
         # print(percentage)
         total['sessios_happend'].append(session_happend)
@@ -491,6 +492,7 @@ def studenttAttendance_defaulter(roll,year) :
                 percentage = 100
                 session_attended = session_happend
         except Exception as e:
+            percentage=0
             print(e)
         # print(percentage)
         total['sessios_happend'].append(session_happend)
@@ -615,6 +617,7 @@ def studenttAttendance_defaulter(roll,year) :
                 percentage = 100
                 session_attended = session_happend
         except Exception as e:
+            percentage=0
             print(e)
         # print(percentage)
         total['sessios_happend'].append(session_happend)
