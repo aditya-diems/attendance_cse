@@ -414,6 +414,8 @@ def studenttAttendance_defaulter(roll,year) :
                             total[sname] +=1
                 except Exception as e:
                     print(e)
+                if 'other attendance' in i.lower():
+                    total[sname] = 18 
             if total[sname] != 0 or 'other attendance' in i.lower():
                 total['sessios_attended'].append(attended)
                 total['sessios_happend'].append(total[sname])
