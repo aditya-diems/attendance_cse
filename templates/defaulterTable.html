@@ -197,7 +197,7 @@
       <div class="col-xl-11 col-lg-8 col-md-9 col-11">
         <div class="card text-center">
           <div class="d-none d-print-block">
-            <p style="margin-bottom: 0">M.S.P.M MANDALS's</p>
+            <p style="margin-bottom: 0">M.S.P. MANDALS's</p>
             <p style="margin-bottom: 0">
               DEOGIRI INSTITUTE OF ENGINEERING AND MANAGEMENT STUDIES, AURANGABD
             </p>
@@ -314,7 +314,8 @@
             <div class="row">
               <div class="col">Class Teacher</div>
               <div class="col">Co-ordinator</div>
-              <div class="col">HMED</div>
+              <div class="col">HOD</div>
+              <div class="col">Director</div>
             </div>
           </div>
         </div>
@@ -345,7 +346,7 @@
             );
 
             // Check if the current row matches the filter value
-            if (lastColumnValue <= filterValue) {
+            if (lastColumnValue < filterValue) {
               table.rows[j].style.display = "";
             } else {
               table.rows[j].style.display = "none";

@@ -1000,12 +1000,13 @@ def defaulterData(year,division,sdate,edate,defaulter):
                 else:
                     cnt+=total['roll'][i][j]
             percentage = 0
+            sess_count[i] = sess_count[i]+18
             try:
                 percentage = (cnt/sess_count[i])*100
                 percentage = round(percentage,2)
                 if percentage > 100:
                     percentage = 100.0
-                    # cnt = sess_count[i]
+                    cnt = sess_count[i]
             except:
                 print('division error')
             
