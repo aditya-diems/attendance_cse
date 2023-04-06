@@ -607,11 +607,11 @@ def searchStudentOther():
          subject = request.form.get('subject')
          batch = request.form.getlist('batch')
          bt = ', '.join(batch)
-         searchStudentOther.atinfo = (year,division,date,subject,batch)
+         session['searchother'] = (year,division,date,subject,batch)
          data = classRecordDBS.getData_batchvise(year,division,batch)
          data.sort()
          # print(data)
-         total_data = (searchStudentOther.atinfo, data,bt)
+         total_data = (session['searchother'], data,bt)
          roll = []
          for i in data:
             roll.append(i[0])
@@ -624,7 +624,7 @@ def addOtherAttendance():
    if 'loggedin' in session and session['authority'] == 'Faculty': 
       import addAttendance
       count = request.form.getlist('count')
-      addAttendance.addOtherAttendance(searchStudentOther.atinfo,count,session['roll'])
+      addAttendance.addOtherAttendance(session['searchother'],count,session['roll'])
       return redirect(url_for('theoryAttendance'))
    return redirect(url_for('login'))
 
@@ -783,11 +783,11 @@ def searchStud_theory():
          batch = request.form.getlist('batch')
          # print(batch)
          bt = ', '.join(batch)
-         searchStud_theory.atinfo = (year,division,date,subject,timeslot,batch)
+         session['searchtheory'] = (year,division,date,subject,timeslot,batch)
          data = classRecordDBS.getData_batchvise(year,division,batch)
          msg = dailyreport.check_session(year,division,date,timeslot)
          data.sort()
-         total_data = (searchStud_theory.atinfo, data,bt,msg)
+         total_data = (session['searchtheory'], data,bt,msg)
          roll = []
          for i in data:
             roll.append(i[0])
@@ -802,8 +802,8 @@ def addAttendance():
       if request.method == 'POST':
          present = request.form.getlist('present')
          # print(session['roll'])
-         addAttendance.addAttendance_theory(searchStud_theory.atinfo,present,session['roll'])
-         addAttendance.addattendance_daily(searchStud_theory.atinfo,present,session['roll'],"Theory")
+         addAttendance.addAttendance_theory(session['searchtheory'],present,session['roll'])
+         addAttendance.addattendance_daily(session['searchtheory'],present,session['roll'],"Theory")
       return redirect(url_for('theoryAttendance'))
    return redirect(url_for('login'))
 
@@ -832,11 +832,11 @@ def searchstudents_practical():
          timeslot = request.form.get('timeslot')
          batch = request.form.getlist('batch')
          # print(batch)
-         searchstudents_practical.atinfo = (year,division,date,subject,timeslot,batch)
+         session['searchpractical'] = (year,division,date,subject,timeslot,batch)
          data = classRecordDBS.getData_batchvise(year,division,batch)
          msg = dailyreport.check_session_practical(year,division,date,batch,timeslot)
          data.sort()
-         total_data = (searchstudents_practical.atinfo, data,msg)
+         total_data = (session['searchpractical'], data,msg)
          roll = []
          for i in data:
             roll.append(i[0])
@@ -851,9 +851,9 @@ def addAttendance__practical():
       if request.method == 'POST':
          present = request.form.getlist('present')
          # print(session['roll'])
-         # print(searchstudents_practical.atinfo)
-         addAttendance.addAttendance_practical(searchstudents_practical.atinfo,present,session['roll'])
-         addAttendance.addattendance_daily(searchstudents_practical.atinfo,present,session['roll'],"Practical")
+         # print(session['searchpractical'])
+         addAttendance.addAttendance_practical(session['searchpractical'],present,session['roll'])
+         addAttendance.addattendance_daily(session['searchpractical'],present,session['roll'],"Practical")
       return redirect(url_for('practicalAttendance'))
    return redirect(url_for('login'))
 
@@ -871,7 +871,7 @@ def dailyreporttable():
       div = request.form.get('division')
       date = request.form.get('date')
       data = dailyreport.dailyreport(year,div,date)
-      dailyreporttable.atinfo = (year,div,date)
+      session['dailyreport'] = (year,div,date)
       return render_template('dailyreporttable.html',data=data)
    return redirect(url_for('login'))
 
@@ -880,7 +880,7 @@ def updatedailyreport():
    if 'loggedin' in session and session['authority'] == 'Faculty': 
       import dailyreport
       reamrks = request.form.getlist('remark')
-      dailyreport.updatedailyreport(dailyreporttable.atinfo,reamrks)
+      dailyreport.updatedailyreport(session['dailyreport'],reamrks)
       return redirect(url_for('dailyreport'))
    return redirect(url_for('login'))
 
