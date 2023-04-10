@@ -5,6 +5,8 @@ import mysql.connector
 import os
 import re
 import pickle
+import json
+
 f = 'fcinfo.pkl'
 fs = 'subinfo.pkl'
 
@@ -111,6 +113,9 @@ def login():
          session['id'] = account[0][0]
          session['authority'] = account[0][1]
          session['username'] = account[0][2]
+         if session['authority'] != 'student':
+            session['SUB'] = account[0][-1]
+            session['SUB'] = json.loads(session['SUB'])
          
          # Redirect to home page    
          if session['authority'] == 'admin' or session['authority'] == 'yearcoordinator':
@@ -159,8 +164,9 @@ def register():
          msg = 'Please fill out the form!'
       else:
          # Account doesnt exists and the form data is valid, now insert new account into accounts table
+         sub = '{"BTECH":{"A":{"THEORY":{},"PRACTICAL":{}},"B":{"THEORY":{},"PRACTICAL":{}}},"TY":{"A":{"THEORY":{},"PRACTICAL":{}},"B":{"THEORY":{},"PRACTICAL":{}}},"SY":{"A":{"THEORY":{},"PRACTICAL":{}},"B":{"THEORY":{},"PRACTICAL":{}}}}'
          obj.accept(id,username,{"Theory":[],"Practical":[]},authoritiy)
-         lo_cur.execute('INSERT INTO account VALUES (%s, %s, %s, %s, %s)', (id, authoritiy, username, password, email,))
+         lo_cur.execute('INSERT INTO account VALUES (%s, %s, %s, %s, %s, %s)', (id, authoritiy, username, password, email, sub))
          logindbs.commit()
          msg = 'You have successfully registered!'
    
@@ -338,44 +344,84 @@ def adminHome():
 # ----------------------------------------------------------------------------------
 @app.route('/manageFaculty')
 def manageFaculty():
-   if 'loggedin' in session and session['authority'] == 'yearcoordinator' or session['authority'] == 'admin':
-      faculty = []
-      for i in ls:
-         faculty.append(i.name) 
-      return render_template('managefaculty.html',faculty = faculty)
-   return redirect(url_for('login'))
+    if 'loggedin' in session and session['authority'] == 'yearcoordinator' or session['authority'] == 'admin':
+        faculty = []
+        logindbs = mysql.connector.connect(user='root', password='', host='localhost', database='logincse')
+        lo_cur = logindbs.cursor()
+        sql = "SELECT * FROM `account` WHERE `authorities` = 'yearcoordinator' OR `authorities` = 'Faculty'"
+        lo_cur.execute (sql)
+        dt = lo_cur.fetchall()
+        # print(dt)
+        for i in dt:
+            faculty.append(i[2])
+        session['managefc'] = dt
+        print(dt)
+        logindbs.close()
+        return render_template('managefaculty.html',faculty = faculty)
+    return redirect(url_for('login'))
 
 @app.route('/selectSubject',methods = ['GET', 'POST'])
 def selectSubject():
-   if 'loggedin' in session and session['authority'] == 'yearcoordinator' or session['authority'] == 'admin':
-      fsub = open(fs,'rb')
-      subs = pickle.load(fsub)
-      all = {}
-      all['rem_subs_th'] = []
-      all['rem_subs_pr'] = []
-      faculty = request.form.get('faculty')
-      session ['fc'] = faculty
-      for i in ls:
-         if i.name == faculty:
-            fsubs = i.subject
-      all['fc'] = faculty
-      all['subs_have'] = fsubs
+    if 'loggedin' in session and session['authority'] == 'yearcoordinator' or session['authority'] == 'admin':
+        fsub = open(fs,'rb')
+        subs = pickle.load(fsub)
 
-      all['len_sub_th'] = len(all['subs_have']['Theory'])
-      all['len_sub_pr'] = len(all['subs_have']['Practical'])
+        faculty = request.form.get('faculty')
+        session['fc'] = faculty
 
-      # print(all['subs_have']['Practical'])
-      for i in subs['Theory']:
-         for j in subs['Theory'][i]:
-            if j not in all['subs_have']['Theory']:
-               all['rem_subs_th'].append(j)
-      
-      for i in subs['Practical']:
-         for j in subs['Practical'][i]:
-            if j not in all['subs_have']['Practical']:
-               all['rem_subs_pr'].append(j)
-      return render_template('selectSubject.html',all = all)
-   return redirect(url_for('login'))
+        for i in session['managefc']:
+            if i[2] == faculty:
+                session['fcdetails'] = i
+                auth = i[1]
+
+        if auth == 'yearcoordinator':
+            for i in ls:
+                if i.name == faculty:
+                    fsubs = i.subject
+            all = {}
+            all['rem_subs_th'] = []
+            all['rem_subs_pr'] = []
+            faculty = request.form.get('faculty')
+            session ['fc'] = faculty
+            for i in ls:
+                if i.name == faculty:
+                    fsubs = i.subject
+            all['fc'] = faculty
+            all['subs_have'] = fsubs
+
+            all['len_sub_th'] = len(all['subs_have']['Theory'])
+            all['len_sub_pr'] = len(all['subs_have']['Practical'])
+
+            # print(all['subs_have']['Practical'])
+            for i in subs['Theory']:
+                for j in subs['Theory'][i]:
+                    if j not in all['subs_have']['Theory']:
+                        all['rem_subs_th'].append(j)
+            
+            for i in subs['Practical']:
+                for j in subs['Practical'][i]:
+                    if j not in all['subs_have']['Practical']:
+                        all['rem_subs_pr'].append(j)
+            return render_template('selectSubject.html',all = all)
+
+        elif auth == 'Faculty':
+            all = {}
+            all['fc'] = faculty
+            all['subs'] = subs
+            all['fcsub'] = session['fcdetails']
+            all['fcsub'] = json.loads(all['fcsub'][-1])            
+            print(all['fcsub'])
+            return render_template('selectSubjectFaculty.html',dict = all)
+    return redirect(url_for('login'))
+
+@app.route('/assignSubjectFaculty', methods=['GET', 'POST'])
+def assignSubjectFaculty():
+    import managefaculty
+    if request.method == 'POST':
+        divs = request.form.getlist('division')
+        br = request.form.getlist('branch')
+        managefaculty.assignSubjectToFaculty(divs,br,session['fcdetails'])
+    return redirect(url_for('manageFaculty'))
 
 @app.route('/assignSubject',methods = ['GET', 'POST'])
 def assignSubject():
@@ -588,35 +634,50 @@ def addStud():
 @app.route('/other')
 def other():
    if 'loggedin' in session and session['authority'] == 'Faculty': 
-      data = []
-      for i in ls:
-         if i.name == session['username']:
-            data = i.subject
-      return render_template('other.html',data=data)
+        logindbs = mysql.connector.connect(user='root', password='', host='localhost', database='logincse')
+        lo_cur = logindbs.cursor()
+        sql = "SELECT * FROM `account` WHERE `authorities` = 'Faculty'"
+        lo_cur.execute (sql)
+        dt = lo_cur.fetchall()
+        for i in dt:
+            if i[2] == session['username']:
+                subs = json.loads(i[-1])
+        newdic={}
+        for i in subs:
+            for j in subs[i]:
+                if subs[i][j]['THEORY']:
+                    if i not in newdic:
+                        newdic[i] = {}
+                        if j not in newdic[i]:
+                            newdic[i][j] = {}
+                    newdic[i][j] = subs[i][j]['THEORY']
+        print(newdic)
+        logindbs.close()
+        return render_template('other.html',data=newdic)
    redirect(url_for('login'))
 
 @app.route('/searchstudentother', methods=['GET', 'POST'])
 def searchStudentOther():
    if 'loggedin' in session and session['authority'] == 'Faculty': 
-      import classRecordDBS
-      import dailyreport
-      if request.method == 'POST':
-         year = request.form.get('year')
-         division = request.form.get('division')
-         date = request.form.get('date')
-         subject = request.form.get('subject')
-         batch = request.form.getlist('batch')
-         bt = ', '.join(batch)
-         session['searchother'] = (year,division,date,subject,batch)
-         data = classRecordDBS.getData_batchvise(year,division,batch)
-         data.sort()
-         # print(data)
-         total_data = (session['searchother'], data,bt)
-         roll = []
-         for i in data:
-            roll.append(i[0])
-         session['roll'] = roll
-      return render_template('addAttendanceOther.html',data = total_data)
+        import classRecordDBS
+        import dailyreport
+        if request.method == 'POST':
+            year = request.form.get('year')
+            division = request.form.get('division')
+            date = request.form.get('date')
+            subject = request.form.get('subject')
+            batch = request.form.getlist('batch')
+            bt = ', '.join(batch)
+            session['searchother'] = (year,division,date,subject,batch)
+            data = classRecordDBS.getData_batchvise(year,division,batch)
+            data.sort()
+            # print(data)
+            total_data = (session['searchother'], data,bt)
+            roll = []
+            for i in data:
+                roll.append(i[0])
+            session['roll'] = roll
+        return render_template('addAttendanceOther.html',data = total_data)
    return redirect(url_for('login'))
 
 @app.route('/addOtherAttendance', methods = ['GET','POST'])
@@ -634,11 +695,25 @@ def addOtherAttendance():
 @app.route('/subjectAttendance_theory')
 def subjectAttendance_theory():
    if 'loggedin' in session and session['authority'] == 'Faculty': 
-      data = []
-      for i in ls:
-         if i.name == session['username']:
-            data = i.subject
-      return render_template('subjectAttendance_theory.html',data = data)
+        logindbs = mysql.connector.connect(user='root', password='', host='localhost', database='logincse')
+        lo_cur = logindbs.cursor()
+        sql = "SELECT * FROM `account` WHERE `authorities` = 'Faculty'"
+        lo_cur.execute (sql)
+        dt = lo_cur.fetchall()
+        for i in dt:
+            if i[2] == session['username']:
+                subs = json.loads(i[-1])
+        newdic={}
+        for i in subs:
+            for j in subs[i]:
+                if subs[i][j]['THEORY']:
+                    if i not in newdic:
+                        newdic[i] = {}
+                        if j not in newdic[i]:
+                            newdic[i][j] = {}
+                    newdic[i][j] = subs[i][j]['THEORY']
+        logindbs.close()
+        return render_template('subjectAttendance_theory.html',data = newdic)
    return redirect(url_for('login'))
 
 @app.route('/subjectTable_theory', methods = ['GET', 'POST'])
@@ -659,11 +734,26 @@ def subjectTable_theory():
 @app.route('/subjectAttendance_practical')
 def subjectAttendance_practical():
    if 'loggedin' in session and session['authority'] == 'Faculty': 
-      data = []
-      for i in ls:
-         if i.name == session['username']:
-            data = i.subject
-      return render_template('subjectAttendance_practical.html',data = data)
+        logindbs = mysql.connector.connect(user='root', password='', host='localhost', database='logincse')
+        lo_cur = logindbs.cursor()
+        sql = "SELECT * FROM `account` WHERE `authorities` = 'Faculty'"
+        lo_cur.execute (sql)
+        dt = lo_cur.fetchall()
+        for i in dt:
+            if i[2] == session['username']:
+                subs = json.loads(i[-1])
+        newdic={}
+        for i in subs:
+            print(subs[i])
+            for j in subs[i]:
+                if subs[i][j]['PRACTICAL']:
+                    if i not in newdic:
+                        newdic[i] = {}
+                        if j not in newdic[i]:
+                            newdic[i][j] = {}
+                    newdic[i][j] = subs[i][j]['PRACTICAL']
+        logindbs.close()
+        return render_template('subjectAttendance_practical.html',data = newdic)
    return redirect(url_for('login'))
 
 @app.route('/subjectTable_practical', methods = ['GET', 'POST'])
@@ -761,11 +851,26 @@ def showRecord():
 @app.route('/theoryAttendance')
 def theoryAttendance():
    if 'loggedin' in session and session['authority'] == 'Faculty': 
-      data = []
-      for i in ls:
-         if i.name == session['username']:
-            data = i.subject
-      return render_template('theoryAttendance.html',data = data)
+        logindbs = mysql.connector.connect(user='root', password='', host='localhost', database='logincse')
+        lo_cur = logindbs.cursor()
+        sql = "SELECT * FROM `account` WHERE `authorities` = 'Faculty'"
+        lo_cur.execute (sql)
+        dt = lo_cur.fetchall()
+        for i in dt:
+            if i[2] == session['username']:
+                subs = json.loads(i[-1])
+        newdic={}
+        for i in subs:
+            print(subs[i])
+            for j in subs[i]:
+                if subs[i][j]['THEORY']:
+                    if i not in newdic:
+                        newdic[i] = {}
+                        if j not in newdic[i]:
+                            newdic[i][j] = {}
+                    newdic[i][j] = subs[i][j]['THEORY']
+        logindbs.close()
+        return render_template('theoryAttendance.html',data = newdic)
    return redirect(url_for('login'))
 
 
@@ -811,78 +916,93 @@ def addAttendance():
 @app.route('/practicalAttendance')
 def practicalAttendance():
    if 'loggedin' in session and session['authority'] == 'Faculty': 
-      data = []
-      for i in ls:
-         if i.name == session['username']:
-            data = i.subject
-      return render_template('practicalAttendance.html',data = data)
+        logindbs = mysql.connector.connect(user='root', password='', host='localhost', database='logincse')
+        lo_cur = logindbs.cursor()
+        sql = "SELECT * FROM `account` WHERE `authorities` = 'Faculty'"
+        lo_cur.execute (sql)
+        dt = lo_cur.fetchall()
+        for i in dt:
+            if i[2] == session['username']:
+                subs = json.loads(i[-1])
+        newdic={}
+        for i in subs:
+            print(subs[i])
+            for j in subs[i]:
+                if subs[i][j]['PRACTICAL']:
+                    if i not in newdic:
+                        newdic[i] = {}
+                        if j not in newdic[i]:
+                            newdic[i][j] = {}
+                    newdic[i][j] = subs[i][j]['PRACTICAL']
+        logindbs.close()
+        return render_template('practicalAttendance.html',data = newdic)
    return redirect(url_for('login'))
 
 @app.route('/searchstudents_practical', methods = ['GET', 'POST'])
 def searchstudents_practical():
-   if 'loggedin' in session and session['authority'] == 'Faculty': 
-      import classRecordDBS
-      import dailyreport
+    if 'loggedin' in session and session['authority'] == 'Faculty': 
+        import classRecordDBS
+        import dailyreport
 
-      if request.method == 'POST':
-         year = request.form.get('year')
-         division = request.form.get('division')
-         date = request.form.get('date')
-         subject = request.form.get('subject')
-         timeslot = request.form.get('timeslot')
-         batch = request.form.getlist('batch')
-         # print(batch)
-         session['searchpractical'] = (year,division,date,subject,timeslot,batch)
-         data = classRecordDBS.getData_batchvise(year,division,batch)
-         msg = dailyreport.check_session_practical(year,division,date,batch,timeslot)
-         data.sort()
-         total_data = (session['searchpractical'], data,msg)
-         roll = []
-         for i in data:
-            roll.append(i[0])
-         session['roll'] = roll
-      return render_template('addAttendancePractical.html',data = total_data)
-   return redirect(url_for('login'))
+        if request.method == 'POST':
+            year = request.form.get('year')
+            division = request.form.get('division')
+            date = request.form.get('date')
+            subject = request.form.get('subject')
+            timeslot = request.form.get('timeslot')
+            batch = request.form.getlist('batch')
+            # print(batch)
+            session['searchpractical'] = (year,division,date,subject,timeslot,batch)
+            data = classRecordDBS.getData_batchvise(year,division,batch)
+            msg = dailyreport.check_session_practical(year,division,date,batch,timeslot)
+            data.sort()
+            total_data = (session['searchpractical'], data,msg)
+            roll = []
+            for i in data:
+                roll.append(i[0])
+            session['roll'] = roll
+        return render_template('addAttendancePractical.html',data = total_data)
+    return redirect(url_for('login'))
 
 @app.route('/addAttendance__practical', methods = ['GET', 'POST'])
 def addAttendance__practical():
-   if 'loggedin' in session and session['authority'] == 'Faculty': 
-      import addAttendance
-      if request.method == 'POST':
-         present = request.form.getlist('present')
-         # print(session['roll'])
-         # print(session['searchpractical'])
-         addAttendance.addAttendance_practical(session['searchpractical'],present,session['roll'])
-         addAttendance.addattendance_daily(session['searchpractical'],present,session['roll'],"Practical")
-      return redirect(url_for('practicalAttendance'))
-   return redirect(url_for('login'))
+    if 'loggedin' in session and session['authority'] == 'Faculty': 
+        import addAttendance
+        if request.method == 'POST':
+            present = request.form.getlist('present')
+            # print(session['roll'])
+            # print(session['searchpractical'])
+            addAttendance.addAttendance_practical(session['searchpractical'],present,session['roll'])
+            addAttendance.addattendance_daily(session['searchpractical'],present,session['roll'],"Practical")
+        return redirect(url_for('practicalAttendance'))
+    return redirect(url_for('login'))
 
 @app.route('/dailyreport')
 def dailyreport():
-   if 'loggedin' in session and session['authority'] == 'Faculty': 
-      return render_template('dailyreport.html')
-   return redirect(url_for('login'))
+    if 'loggedin' in session and session['authority'] == 'Faculty': 
+        return render_template('dailyreport.html')
+    return redirect(url_for('login'))
 
 @app.route('/dailyreporttable',methods=['GET', 'POST'])
 def dailyreporttable():
    if 'loggedin' in session and session['authority'] == 'Faculty': 
-      import dailyreport
-      year = request.form.get('year')
-      div = request.form.get('division')
-      date = request.form.get('date')
-      data = dailyreport.dailyreport(year,div,date)
-      session['dailyreport'] = (year,div,date)
-      return render_template('dailyreporttable.html',data=data)
+        import dailyreport
+        year = request.form.get('year')
+        div = request.form.get('division')
+        date = request.form.get('date')
+        data = dailyreport.dailyreport(year,div,date)
+        session['dailyreport'] = (year,div,date)
+        return render_template('dailyreporttable.html',data=data)
    return redirect(url_for('login'))
 
 @app.route('/updatedailyreport',methods=['GET', 'POST'])
 def updatedailyreport():
-   if 'loggedin' in session and session['authority'] == 'Faculty': 
-      import dailyreport
-      reamrks = request.form.getlist('remark')
-      dailyreport.updatedailyreport(session['dailyreport'],reamrks)
-      return redirect(url_for('dailyreport'))
-   return redirect(url_for('login'))
+    if 'loggedin' in session and session['authority'] == 'Faculty': 
+        import dailyreport
+        reamrks = request.form.getlist('remark')
+        dailyreport.updatedailyreport(session['dailyreport'],reamrks)
+        return redirect(url_for('dailyreport'))
+    return redirect(url_for('login'))
 
 
 if __name__ == '__main__':
