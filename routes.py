@@ -1087,8 +1087,8 @@ def dailyreporttable():
 def updatedailyreport():
     if 'loggedin' in session and session['authority'] == 'Faculty':
         import dailyreport
-        reamrks = request.form.getlist('remark')
-        dailyreport.updatedailyreport(session['dailyreport'], reamrks)
+        session['reamrks'] = request.form.getlist('remark')
+        dailyreport.updatedailyreport(session['dailyreport'],session['reamrks'])
         return redirect(url_for('dailyreport'))
     return redirect(url_for('login'))
 
