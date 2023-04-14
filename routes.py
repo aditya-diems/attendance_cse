@@ -248,15 +248,10 @@ def profile():
         logindbs = mysql.connector.connect(
             user='root', password='', host='localhost', database='logincse')
         lo_cur = logindbs.cursor()
-        # We need all the account info for the user so we can display it on the profile page
-        lo_cur.execute('SELECT * FROM account WHERE id = %s', (session['id'],))
-        account['data'] = lo_cur.fetchone()
-        for i in ls:
-            # print(i.name,session['username'])
-            if i.name == session['username']:
-                account['subject'] = i.subject
-        print(account)
+        lo_cur.execute('SELECT * FROM account WHERE username = %s', (session['username'],))
+        account = lo_cur.fetchone()
         # Show the profile page with account info
+        logindbs.close()
         return render_template('profile.html', account=account)
     # User is not loggedin redirect to login page
     return redirect(url_for('login'))
