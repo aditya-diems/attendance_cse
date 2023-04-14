@@ -175,10 +175,12 @@ def forgetPass():
             mail.send(message)
             print(message)
             msg = 'Your credentials are sent to your email'
-            render_template('forgetPass.html', msg=msg)
+            return render_template('forgetPass.html', msg=msg)
         else:
             msg = 'This username dosen`t exist'
             return render_template('forgetPass.html', msg=msg)
+    logindbs.close()
+    return render_template('forgetPass.html', msg=msg)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
