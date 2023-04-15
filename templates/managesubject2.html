@@ -141,7 +141,7 @@
           </li>
           <li class="nav-item dropdown">
             <a
-              class="nav-link dropdown-toggle "
+              class="nav-link dropdown-toggle"
               href="#"
               id="navbarDropdownMenuLink"
               data-toggle="dropdown"
@@ -168,8 +168,17 @@
     <div class="row d-flex justify-content-center">
       <div class="col-xl-7 col-lg-8 col-md-9 col-11 text-center">
         <div class="card">
-          <h4 class="text-center mb-4">Manage Subjects</h4>
-          <h5>Subject for {{all['year']}}-{{all['subtype']}}</h5>
+          <h4 class="text-center mb-4">Manage {{all['subtype']}} Subjects</h4>
+          <h5>Subject for {{all['year']}}</h5>
+          <div class="alert alert-info" role="alert">
+            {% if all['subtype'] == 'Theory' %}Note : If the subject name is
+            <b>'Full Stack Development'</b> then it will show <b>'FSD'</b> in
+            attendance record. {% else %} Note : You should provide
+            <b>'(PR)'</b> infront of practical subject name. <br />
+            If the subject name is
+            <b>'Full Stack Development (PR)'</b> then it will show
+            <b>'FSDPR'</b> in attendance record.{% endif %}
+          </div>
           <div class="row">
             <div class="col">
               <h6>Subject List</h6>
