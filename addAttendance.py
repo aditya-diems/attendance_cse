@@ -19,7 +19,6 @@ def addOtherAttendance(data, count, roll):
     for i in range(len(count)):
         count[i] = int(count[i])
 
-    print(data, count, roll)
     if data[0] == "BTECH":
         date = data[2].replace('-', '_')
         try:
