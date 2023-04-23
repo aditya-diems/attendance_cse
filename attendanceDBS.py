@@ -57,17 +57,13 @@ def subjectAttendance_theory(year, division, subject, sdate, edate):
                 for pp in data:
                     temp.append(pp[0])
                 total[i] = []
-                if 1 in temp:
+                if any(tenz > 0 for tenz in temp):
                     for cc in data:
                         if cc[0] == -1:
                             total[i].append((0,))
                         else:
                             total[i].append(cc)
                     new_dates.append(i)
-                # print(total[i])
-                # if data[0][0] != -1:
-                #     total[i] = data
-                #     new_dates.append(i)
             except:
                 print('except')
 
@@ -108,16 +104,13 @@ def subjectAttendance_theory(year, division, subject, sdate, edate):
                 total[i] = []
                 # print(i,temp)
                 print(temp)
-                if '1' in temp or 1 in temp:
+                if any(int(tenz) > 0 for tenz in temp):
                     for cc in data:
                         if cc[0] == '-1' or cc[0] == -1:
                             total[i].append((0,))
                         else:
                             total[i].append(cc)
                     new_dates.append(i)
-                # if data[0][0] != -1:
-                #     total[i] = data
-                #     new_dates.append(i)
             except:
                 print('except')
 
@@ -157,17 +150,13 @@ def subjectAttendance_theory(year, division, subject, sdate, edate):
                 for pp in data:
                     temp.append(pp[0])
                 total[i] = []
-                if 1 in temp:
+                if any(tenz > 0 for tenz in temp):
                     for cc in data:
                         if cc[0] == -1:
                             total[i].append((0,))
                         else:
                             total[i].append(cc)
                     new_dates.append(i)
-                print(total[i])
-                # if data[0][0] != -1:
-                #     total[i] = data
-                #     new_dates.append(i)
             except:
                 print('except')
 
@@ -771,7 +760,7 @@ def defaulterData(year, division, sdate, edate, defaulter):
 
                         ll.append(data)
                         if 'other attendance' not in j.lower():
-                            total[sname] += 1
+                            total[sname] += max(data)
                 except:
                     print('except')
 
@@ -967,7 +956,7 @@ def defaulterData(year, division, sdate, edate, defaulter):
                         ll.append(data)
 
                         if 'other attendance' not in j.lower():
-                            total[sname] += 1
+                            total[sname] += max(data)
                 except:
                     print('except')
 
@@ -1157,7 +1146,7 @@ def defaulterData(year, division, sdate, edate, defaulter):
                         ll.append(data)
 
                         if 'other attendance' not in j.lower():
-                            total[sname] += 1
+                            total[sname] += max(data)
                 except:
                     print('except')
 
