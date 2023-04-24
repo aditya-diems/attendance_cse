@@ -1048,7 +1048,7 @@ def addAttendance():
         if request.method == 'POST':
             present = request.form.getlist('present')
             # print(session['roll'])
-            if session['attype'] == 'Overwrite':
+            if session['attype'] == 'Regular':
                 addAttendance.addAttendance_theory(
                     session['searchtheory'], present, session['roll'])
             elif session['attype'] == 'Addition':
