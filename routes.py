@@ -1159,7 +1159,10 @@ def updatedailyreport():
     if 'loggedin' in session and session['authority'] == 'Faculty':
         import dailyreport
         session['reamrks'] = request.form.getlist('remark')
-        dailyreport.updatedailyreport(session['dailyreport'],session['reamrks'])
+        session['sphone'] = request.form.getlist('sphone')
+        session['pphone'] = request.form.getlist('pphone')
+        dailyreport.updatedailyreport(
+            session['dailyreport'], session['reamrks'], session['sphone'], session['pphone'])
         return redirect(url_for('dailyreport'))
     return redirect(url_for('login'))
 
