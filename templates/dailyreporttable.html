@@ -28,11 +28,9 @@
         .Name {
           width: 300px;
         }
-        .Student,
-        .Parent {
-          width: 0px;
-        }
+        
       }
+      
       table {
         page-break-inside: auto;
       }
@@ -210,7 +208,7 @@
     <!-- nav ends -->
     <body>
       <div class="row d-flex justify-content-center">
-        <div class="col-xl-10 col-lg-8 col-md-9 col-11">
+        <div class="col-xl col-lg col-md col">
           <div class="card text-center">
             <div class="d-none d-print-block">
               <p style="margin-bottom: 0">M.S.P. MANDALS's</p>
@@ -279,7 +277,7 @@
                     {% for cell in range(data['len']) %}
                     <td>{{row[cell]}}</td>
                     {% endfor %}
-                    <td class="remark">
+                    <td style="width: 150px;">
                       <input
                         type="text"
                         name="sphone"
@@ -287,7 +285,7 @@
                         class="form-control"
                       />
                     </td>
-                    <td class="remark">
+                    <td style="width: 150px;">
                       <input
                         type="text"
                         name="pphone"
@@ -295,7 +293,7 @@
                         class="form-control"
                       />
                     </td>
-                    <td class="remark">
+                    <td style="width: 150px;">
                       <input
                         type="text"
                         name="remark"
@@ -310,7 +308,7 @@
                     {% for cell in range(data['len']) %}
                     <td>{{row[cell]}}</td>
                     {% endfor %}
-                    <td class="remark">
+                    <td style="width: 150px;">
                       <input
                         type="text"
                         name="sphone"
@@ -318,7 +316,7 @@
                         class="form-control"
                       />
                     </td>
-                    <td class="remark">
+                    <td style="width: 150px;">
                       <input
                         type="text"
                         name="pphone"
@@ -326,7 +324,7 @@
                         class="form-control"
                       />
                     </td>
-                    <td class="remark">
+                    <td style="width: 150px;">
                       <input
                         type="text"
                         name="remark"
