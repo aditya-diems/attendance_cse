@@ -20,8 +20,6 @@ def addInSubject(roll, name, year, div):
 
     fsub = open(fs, 'rb')
     subs_btech = pickle.load(fsub)
-
-    # print(year)
     if year == "BTECH":
         for i in subs_btech['Theory'][year]:
             sql = "INSERT INTO "+"`"+i+"`" + \
