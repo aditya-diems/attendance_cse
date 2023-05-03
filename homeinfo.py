@@ -46,8 +46,8 @@ def getleccount(subs):
                                 data = btech.fetchall()
                                 for zz in range(len(data)):
                                     data[zz] = data[zz][0]
-                                if 1 in data or 0 in data:
-                                    tempcount += 1
+                                if any(tenz > 0 for tenz in data):
+                                    tempcount += max(data)
                             if 'other attendance' not in l:
                                 if j in count:
                                     count[j][l] = tempcount
@@ -70,8 +70,8 @@ def getleccount(subs):
                                 data = btechP.fetchall()
                                 for zz in range(len(data)):
                                     data[zz] = data[zz][0]
-                                if 1 in data or 0 in data:
-                                    tempcount += 1
+                                if any(tenz > 0 for tenz in data):
+                                    tempcount += max(data)
                             if j in count:
                                 count[j][l] = tempcount
                             else:
@@ -94,8 +94,8 @@ def getleccount(subs):
                                 data = ty.fetchall()
                                 for zz in range(len(data)):
                                     data[zz] = data[zz][0]
-                                if 1 in data or 0 in data:
-                                    tempcount += 1
+                                if any(tenz > 0 for tenz in data):
+                                    tempcount += max(data)
                             if 'other attendance' not in l:
                                 if j in count:
                                     count[j][l] = tempcount
@@ -118,8 +118,8 @@ def getleccount(subs):
                                 data = tyP.fetchall()
                                 for zz in range(len(data)):
                                     data[zz] = data[zz][0]
-                                if 1 in data or 0 in data:
-                                    tempcount += 1
+                                if any(tenz > 0 for tenz in data):
+                                    tempcount += max(data)
                             if j in count:
                                 count[j][l] = tempcount
                             else:
@@ -142,8 +142,8 @@ def getleccount(subs):
                                 data = sy.fetchall()
                                 for zz in range(len(data)):
                                     data[zz] = data[zz][0]
-                                if 1 in data or 0 in data:
-                                    tempcount += 1
+                                if any(tenz > 0 for tenz in data):
+                                    tempcount += max(data)
                             if 'other attendance' not in l:
                                 if j in count:
                                     count[j][l] = tempcount
@@ -166,8 +166,8 @@ def getleccount(subs):
                                 data = syP.fetchall()
                                 for zz in range(len(data)):
                                     data[zz] = data[zz][0]
-                                if 1 in data or 0 in data:
-                                    tempcount += 1
+                                if any(tenz > 0 for tenz in data):
+                                    tempcount += max(data)
                             if j in count:
                                 count[j][l] = tempcount
                             else:
