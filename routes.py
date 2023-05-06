@@ -1125,6 +1125,7 @@ def searchstudents_practical():
             for i in data:
                 roll.append(i[0])
             session['roll'] = roll
+            print(total_data)
         return render_template('addAttendancePractical.html', data=total_data)
     return redirect(url_for('login'))
 

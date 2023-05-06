@@ -166,7 +166,7 @@ def check_session_practical(year, division, date, batch, timeslot):
               '3:30': 7,
               '4:30': 8}
 
-        print(col[tt[timeslot]])
+        # print(col[tt[timeslot]])
 
         try:
             if timeslot not in col:
