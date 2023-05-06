@@ -1241,6 +1241,7 @@ def examdisplay():
             except Exception as e:
                 all['msg'] = "Data not found"
                 print(e)
+            marks.close()
             return render_template('examdisplayTable.html', data=all)
         return render_template('examdisplay.html')
     return redirect(url_for('login'))
@@ -1283,6 +1284,7 @@ def examdelete1():
             sql = 'DROP TABLE `{}`'.format(i)
             markCur.execute(sql)
             marks.commit()
+        marks.close()
         return redirect(url_for('examdelete'))
     return redirect(url_for('login'))
 
