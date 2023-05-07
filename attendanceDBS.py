@@ -172,12 +172,10 @@ def subjectAttendance_theory(year, division, subject, sdate, edate):
     at_ty.close()
     at_btech.close()
 
-    # print(total)
     return total
 
+
 # For practical data ---------------------------------------------------------
-
-
 def subjectAttendance_practical(year, division, subject, batch, sdate, edate):
     ap_btech = mysql.connector.connect(
         user='root', password='', host='localhost', database='practical_btech')
@@ -658,12 +656,9 @@ def classAttendance(year, division, sdate, edate):
     at_btech.close()
     at_sy.close()
     at_ty.close()
-
     ap_btech.close()
     ap_sy.close()
     ap_ty.close()
-    # print(new_dates)
-    # print(total)
     return total
 
 
@@ -705,7 +700,6 @@ def defaulterData(year, division, sdate, edate, defaulter):
     new_dates = []
 
     if year == 'BTECH':
-        # for theory----------------------------------
         try:
             sub = subs['Theory'][year][0]
             sql = 'SELECT roll,name,division FROM `{}` WHERE division = "{}"'.format(
@@ -1283,7 +1277,6 @@ def defaulterData(year, division, sdate, edate, defaulter):
     at_btech.close()
     at_sy.close()
     at_ty.close()
-
     ap_btech.close()
     ap_sy.close()
     ap_ty.close()

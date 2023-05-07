@@ -32,7 +32,6 @@ def cleanfromsubs(year):
     btechP = ap_btech.cursor()
     tyP = ap_ty.cursor()
     syP = ap_sy.cursor()
-    print('in clean from sub')
 
     if year == 'BTECH':
         tableT = []
@@ -42,7 +41,6 @@ def cleanfromsubs(year):
         for i in subs['Practical'][year]:
             tableP.append(i)
 
-        # for theory ---------------------------------------------------
         for i in tableT:
             sql = "SHOW COLUMNS FROM `{}`".format(i)
             btech.execute(sql)
@@ -78,6 +76,7 @@ def cleanfromsubs(year):
         sql = "DELETE FROM `account` WHERE email = 'BTECH@gmail.com'"
         lo_cur.execute(sql)
         logindbs.commit()
+        logindbs.close()
 
     elif year == 'TY':
         tableT = []
@@ -123,6 +122,7 @@ def cleanfromsubs(year):
         sql = "DELETE FROM `account` WHERE email = 'TY@gmail.com'"
         lo_cur.execute(sql)
         logindbs.commit()
+        logindbs.close()
 
     elif year == 'SY':
         tableT = []
@@ -168,6 +168,13 @@ def cleanfromsubs(year):
         sql = "DELETE FROM `account` WHERE email = 'SY@gmail.com'"
         lo_cur.execute(sql)
         logindbs.commit()
+        logindbs.close()
+    at_sy.close()
+    ap_sy.close()
+    at_ty.close()
+    ap_ty.close()
+    at_btech.close()
+    ap_btech.close()
 
 
 def cleanFromDaily(year):
@@ -184,10 +191,12 @@ def cleanFromDaily(year):
             sql = "DROP TABLE `{}`".format(i[0])
             dcse_cur.execute(sql)
             dcse.commit()
+    dcse.close()
+
 
 def cleanmarks(year):
     marks = mysql.connector.connect(
-    user='root', password='', host='localhost', database='marks_cse')
+        user='root', password='', host='localhost', database='marks_cse')
     markCur = marks.cursor()
     sql = 'SHOW TABLES'
     markCur.execute(sql)
@@ -196,13 +205,15 @@ def cleanmarks(year):
     for i in tbs:
         temp = i[0].split('-')
         print(temp)
-        if temp[1]==year.lower():
+        if temp[1] == year.lower():
             delete.append(i[0])
     print(delete)
     for i in delete:
         sql = 'DROP TABLE `{}`'.format(i)
-        markCur.execute(sql) 
+        markCur.execute(sql)
         marks.commit()
+    marks.close()
+
 
 def cleandata(year):
     cur = mysql_stud.connection.cursor()

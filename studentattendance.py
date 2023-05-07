@@ -121,7 +121,6 @@ def studenttAttendance_theory(roll, year, subject):
     at_sy.close()
     at_ty.close()
     at_btech.close()
-    print(total)
     return total
 
 
@@ -237,7 +236,6 @@ def studenttAttendance_practical(roll, year, subject):
             total['col'].append(i)
             total['attendance'].append(j)
 
-    print(total)
     ap_sy.close()
     ap_ty.close()
     ap_btech.close()
@@ -404,8 +402,6 @@ def studenttAttendance_defaulter(roll, year):
         total['subs'].append('Sessions Count')
         total['subs'].append('Percentage')
 
-        return total
-
     elif year == "TY":
         # for theory
         total['subs'] = []
@@ -540,8 +536,6 @@ def studenttAttendance_defaulter(roll, year):
         total['sessios_attended'].append(percentage)
         total['subs'].append('Sessions Count')
         total['subs'].append('Percentage')
-
-        return total
 
     elif year == "SY":
         # for theory
@@ -678,7 +672,13 @@ def studenttAttendance_defaulter(roll, year):
         total['subs'].append('Sessions Count')
         total['subs'].append('Percentage')
 
-        return total
+    at_btech.close()
+    ap_btech.close()
+    at_ty.close()
+    ap_ty.close()
+    at_sy.close()
+    ap_sy.close()
+    return total
 
 
 def studentAttendanceKundli(roll, year):
@@ -841,8 +841,6 @@ def studentAttendanceKundli(roll, year):
         total['subs'].append('Sessions Count')
         total['subs'].append('Percentage')
 
-        return total
-
     elif year == "TY":
         # for theory
         total['subs'] = []
@@ -977,8 +975,6 @@ def studentAttendanceKundli(roll, year):
         total['sessios_attended'].append(percentage)
         total['subs'].append('Sessions Count')
         total['subs'].append('Percentage')
-
-        return total
 
     elif year == "SY":
         # for theory
@@ -1115,7 +1111,13 @@ def studentAttendanceKundli(roll, year):
         total['subs'].append('Sessions Count')
         total['subs'].append('Percentage')
 
-        return total
+    at_btech.close()
+    ap_btech.close()
+    at_ty.close()
+    ap_ty.close()
+    at_sy.close()
+    ap_sy.close()
+    return total
 
 
 def studentAttendanceDatewise(roll, year, sdate, edate):
@@ -1263,8 +1265,6 @@ def studentAttendanceDatewise(roll, year, sdate, edate):
         total['subs'].append('Sessions Count')
         total['subs'].append('Percentage')
 
-        return total
-
     elif year == "TY":
         total['subs'] = []
         total['row'] = []
@@ -1372,8 +1372,6 @@ def studentAttendanceDatewise(roll, year, sdate, edate):
         total['sessios_attended'].append(percentage)
         total['subs'].append('Sessions Count')
         total['subs'].append('Percentage')
-
-        return total
 
     elif year == "SY":
         total['subs'] = []
@@ -1483,6 +1481,12 @@ def studentAttendanceDatewise(roll, year, sdate, edate):
         total['subs'].append('Sessions Count')
         total['subs'].append('Percentage')
 
-        return total
+    at_btech.close()
+    ap_btech.close()
+    at_ty.close()
+    ap_ty.close()
+    at_sy.close()
+    ap_sy.close()
+    return total
 
     # print(roll, year, sdate, edate)

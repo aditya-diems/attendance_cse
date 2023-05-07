@@ -55,7 +55,7 @@ def dailyreport(year, div, date):
 
     except:
         print('table not exist')
-
+    dcse.close()
     return total
 
 
@@ -135,7 +135,7 @@ def check_session(year, division, date, timeslot):
                     msg = 'Attendance for this time slot is recorded already'
         except:
             pass
-
+    dcse.close()
     return msg
 
 
@@ -194,4 +194,5 @@ def check_session_practical(year, division, date, batch, timeslot):
         except:
             pass
 
+    dcse.close()
     return msg

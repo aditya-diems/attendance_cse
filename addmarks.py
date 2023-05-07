@@ -4,11 +4,12 @@ import mysql.connector
 import pickle
 import csv
 
-def addmarks(file_path,exam,year,div):
+
+def addmarks(file_path, exam, year, div):
     marks = mysql.connector.connect(
         user='root', password='', host='localhost', database='marks_cse')
     markCur = marks.cursor()
-    fobj = open(file_path,'r')
+    fobj = open(file_path, 'r')
     data = csv.reader(fobj)
     for i in data:
         cols = i
@@ -16,9 +17,9 @@ def addmarks(file_path,exam,year,div):
     columns = ''
     for i in cols:
         if i == cols[-1]:
-            columns += '`{}` TEXT NOT NULL'.format(i) 
+            columns += '`{}` TEXT NOT NULL'.format(i)
         else:
-            columns += '`{}` TEXT NOT NULL,'.format(i) 
+            columns += '`{}` TEXT NOT NULL,'.format(i)
     tablename = exam+'-'+year+'-'+div
     try:
         sql = 'CREATE TABLE `'+tablename+'` ('+columns+')'
@@ -35,9 +36,8 @@ def addmarks(file_path,exam,year,div):
                 row += "'{}'".format(i[j])
             else:
                 row += "'{}',".format(i[j])
-        sql = 'INSERT INTO `'+tablename+'` VALUES ('+ row +')'
+        sql = 'INSERT INTO `'+tablename+'` VALUES (' + row + ')'
         markCur.execute(sql)
         marks.commit()
 
     marks.close()
-

@@ -61,7 +61,6 @@ def addOtherAttendance(data, count, roll):
                     data[3], date, count[i], roll[i])
                 btech.execute(sql)
                 at_btech.commit()
-        at_btech.close()
 
     elif data[0] == "TY":
         date = data[2].replace('-', '_')
@@ -105,7 +104,6 @@ def addOtherAttendance(data, count, roll):
                     data[3], date, count[i], roll[i])
                 ty.execute(sql)
                 at_ty.commit()
-        at_ty.close()
 
     elif data[0] == "SY":
         date = data[2].replace('-', '_')
@@ -149,7 +147,10 @@ def addOtherAttendance(data, count, roll):
                     data[3], date, count[i], roll[i])
                 sy.execute(sql)
                 at_sy.commit()
-        at_sy.close()
+
+    at_btech.close()
+    at_ty.close()
+    at_sy.close()
 
 
 def addattendance_daily(data, present, roll, torp):
@@ -465,7 +466,6 @@ def addAttendance_theory(data, present, roll):
                     data[3], date, i)
                 btech.execute(sql)
                 at_btech.commit()
-        at_btech.close()
 
     elif data[0] == "TY":
         date = data[2].replace('-', '_')
@@ -509,7 +509,6 @@ def addAttendance_theory(data, present, roll):
                     data[3], date, i)
                 ty.execute(sql)
                 at_ty.commit()
-        at_ty.close()
 
     elif data[0] == "SY":
         date = data[2].replace('-', '_')
@@ -553,7 +552,10 @@ def addAttendance_theory(data, present, roll):
                     data[3], date, i)
                 sy.execute(sql)
                 at_sy.commit()
-        at_sy.close()
+
+    at_btech.close()
+    at_ty.close()
+    at_sy.close()
 
 
 def addDoubleAttendance_theory(data, present, roll):
@@ -567,14 +569,15 @@ def addDoubleAttendance_theory(data, present, roll):
     btech = at_btech.cursor()
     ty = at_ty.cursor()
     sy = at_sy.cursor()
-    print('data',data)
+
     if data[0] == "BTECH":
         date = data[2].replace('-', '_')
         for i in present:
-            sql = "SELECT `{}` FROM `{}` WHERE roll = {}".format(date, data[3],i)
+            sql = "SELECT `{}` FROM `{}` WHERE roll = {}".format(
+                date, data[3], i)
             btech.execute(sql)
             curattendance = btech.fetchone()[0]
-            curattendance+=1
+            curattendance += 1
             sql = "UPDATE `{}` SET `{}`={} WHERE roll={} ".format(
                 data[3], date, curattendance, i)
             btech.execute(sql)
@@ -583,10 +586,11 @@ def addDoubleAttendance_theory(data, present, roll):
     elif data[0] == "TY":
         date = data[2].replace('-', '_')
         for i in present:
-            sql = "SELECT `{}` FROM `{}` WHERE roll = {}".format(date, data[3],i)
+            sql = "SELECT `{}` FROM `{}` WHERE roll = {}".format(
+                date, data[3], i)
             ty.execute(sql)
             curattendance = ty.fetchone()[0]
-            curattendance+=1
+            curattendance += 1
             sql = "UPDATE `{}` SET `{}`={} WHERE roll={} ".format(
                 data[3], date, curattendance, i)
             ty.execute(sql)
@@ -595,18 +599,22 @@ def addDoubleAttendance_theory(data, present, roll):
     elif data[0] == "SY":
         date = data[2].replace('-', '_')
         for i in present:
-            sql = "SELECT `{}` FROM `{}` WHERE roll = {}".format(date, data[3],i)
+            sql = "SELECT `{}` FROM `{}` WHERE roll = {}".format(
+                date, data[3], i)
             sy.execute(sql)
             curattendance = sy.fetchone()[0]
-            curattendance+=1
+            curattendance += 1
             sql = "UPDATE `{}` SET `{}`={} WHERE roll={} ".format(
                 data[3], date, curattendance, i)
             sy.execute(sql)
             at_sy.commit()
 
+    at_btech.close()
+    at_ty.close()
+    at_sy.close()
+
 
 def addAttendance_practical(data, present, roll):
-
     ap_btech = mysql.connector.connect(
         user='root', password='', host='localhost', database='practical_btech')
     ap_ty = mysql.connector.connect(
@@ -661,7 +669,6 @@ def addAttendance_practical(data, present, roll):
                     data[3], date, i)
                 btechP.execute(sql)
                 ap_btech.commit()
-        ap_btech.close()
 
     elif data[0] == "TY":
         date = data[2].replace('-', '_')
@@ -706,7 +713,6 @@ def addAttendance_practical(data, present, roll):
                     data[3], date, i)
                 tyP.execute(sql)
                 ap_ty.commit()
-        ap_ty.close()
 
     elif data[0] == "SY":
         date = data[2].replace('-', '_')
@@ -751,4 +757,6 @@ def addAttendance_practical(data, present, roll):
                     data[3], date, i)
                 syP.execute(sql)
                 ap_sy.commit()
-        ap_sy.close()
+    ap_sy.close()
+    ap_btech.close()
+    ap_ty.close()

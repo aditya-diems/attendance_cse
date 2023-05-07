@@ -5,7 +5,6 @@ import mysql.connector
 
 
 def deletteFromDailyReport(year, division, date, subject, torp, roll):
-    print('in daily')
     dcse = mysql.connector.connect(
         user='root', password='', host='localhost', database='daily_cse')
     dcse_cur = dcse.cursor()
@@ -62,6 +61,7 @@ def deletteFromDailyReport(year, division, date, subject, torp, roll):
                     tableName, i)
                 dcse_cur.execute(sql)
                 dcse.commit()
+    dcse.close()
 
 
 def deleteAttendanceTheory(year, division, date, subject, batch, torp):
@@ -80,7 +80,6 @@ def deleteAttendanceTheory(year, division, date, subject, batch, torp):
     date = date.replace('-', '_')
 
     if year == "BTECH":
-
         roll = []
         try:
             for i in batch:
@@ -101,7 +100,6 @@ def deleteAttendanceTheory(year, division, date, subject, batch, torp):
 
         date = date.replace('_', '-')
         deletteFromDailyReport(year, division, date, subject, torp, roll)
-        at_btech.close()
 
     elif year == "TY":
         roll = []
@@ -124,7 +122,6 @@ def deleteAttendanceTheory(year, division, date, subject, batch, torp):
 
         date = date.replace('_', '-')
         deletteFromDailyReport(year, division, date, subject, torp, roll)
-        at_ty.close()
 
     elif year == "SY":
         roll = []
@@ -147,7 +144,9 @@ def deleteAttendanceTheory(year, division, date, subject, batch, torp):
 
         date = date.replace('_', '-')
         deletteFromDailyReport(year, division, date, subject, torp, roll)
-        at_sy.close()
+    at_sy.close()
+    at_ty.close()
+    at_btech.close()
 
 
 def deleteAttendancePractical(year, division, date, subject, timeslot, batch, torp):
@@ -187,7 +186,6 @@ def deleteAttendancePractical(year, division, date, subject, timeslot, batch, to
 
         date = date.replace('_', '-')
         deletteFromDailyReport(year, division, date, subject, torp, roll)
-        ap_btech.close()
 
     elif year == "TY":
         roll = []
@@ -211,7 +209,6 @@ def deleteAttendancePractical(year, division, date, subject, timeslot, batch, to
 
         date = date.replace('_', '-')
         deletteFromDailyReport(year, division, date, subject, torp, roll)
-        ap_ty.close()
 
     elif year == "SY":
         roll = []
@@ -235,4 +232,6 @@ def deleteAttendancePractical(year, division, date, subject, timeslot, batch, to
 
         date = date.replace('_', '-')
         deletteFromDailyReport(year, division, date, subject, torp, roll)
-        ap_sy.close()
+    ap_sy.close()
+    ap_ty.close()
+    ap_btech.close()

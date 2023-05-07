@@ -3,7 +3,6 @@ from routes import mysql_stud
 import mysql.connector
 import pickle
 
-
 fs = 'subinfo.pkl'
 
 
@@ -30,7 +29,6 @@ def addInSubject(roll, name, year, div):
             values = (str(roll), name, div)
             btech.execute(sql, values)
             at_btech.commit()
-        at_btech.close()
 
     elif year == 'TY':
         for i in subs_btech['Theory'][year]:
@@ -39,7 +37,6 @@ def addInSubject(roll, name, year, div):
             values = (str(roll), name, div)
             ty.execute(sql, values)
             at_ty.commit()
-        at_ty.close()
 
     elif year == 'SY':
         for i in subs_btech['Theory'][year]:
@@ -48,7 +45,9 @@ def addInSubject(roll, name, year, div):
             values = (str(roll), name, div)
             sy.execute(sql, values)
             at_sy.commit()
-        at_sy.close()
+    at_btech.close()
+    at_ty.close()
+    at_sy.close()
 
 
 def addInPractical(roll, name, year, div, batch):
@@ -73,7 +72,6 @@ def addInPractical(roll, name, year, div, batch):
             values = (str(roll), name, div, batch)
             btechP.execute(sql, values)
             ap_btech.commit()
-        ap_btech.close()
 
     elif year == 'TY':
         for i in subs_btech['Practical'][year]:
@@ -82,7 +80,6 @@ def addInPractical(roll, name, year, div, batch):
             values = (str(roll), name, div, batch)
             tyP.execute(sql, values)
             ap_ty.commit()
-        ap_ty.close()
 
     elif year == 'SY':
         for i in subs_btech['Practical'][year]:
@@ -91,7 +88,10 @@ def addInPractical(roll, name, year, div, batch):
             values = (str(roll), name, div, batch)
             syP.execute(sql, values)
             ap_sy.commit()
-        ap_sy.close()
+
+    ap_btech.close()
+    ap_ty.close()
+    ap_sy.close()
 
 
 def addLoginInfo(roll, name, year):
@@ -107,6 +107,7 @@ def addLoginInfo(roll, name, year):
     lo_cur.execute('INSERT INTO account VALUES (%s, %s, %s, %s, %s)',
                    (roll, authoritiy, username, password, email))
     logindbs.commit()
+    logindbs.close()
 
 
 def addstud(roll, name, year, division, batch):
