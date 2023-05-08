@@ -1216,10 +1216,10 @@ def addmarks():
 @app.route('/examdisplay', methods=['GET', 'POST'])
 def examdisplay():
     if 'loggedin' in session and session['authority'] == 'examcoordinator':
-        marks = mysql.connector.connect(
-            user='root', password='', host='localhost', database='marks_cse')
-        markCur = marks.cursor()
         if request.method == 'POST':
+            marks = mysql.connector.connect(
+                user='root', password='', host='localhost', database='marks_cse')
+            markCur = marks.cursor()
             all = {}
             all['msg'] = ''
             exam = request.form.get('exam')
@@ -1227,6 +1227,7 @@ def examdisplay():
             div = request.form.get('division')
             all['pre'] = [exam, year, div]
             tablename = exam+'-'+year+'-'+div
+            all['tname'] = tablename
             try:
                 sql = "SHOW COLUMNS FROM `{}`".format(tablename)
                 markCur.execute(sql)
@@ -1239,6 +1240,11 @@ def examdisplay():
                 markCur.execute(sql)
                 data = markCur.fetchall()
                 all['data'] = data
+                roll = []
+                for k in data:
+                    roll.append(k[0])
+                all['roll'] = roll
+                session['examupdate'] = all
             except Exception as e:
                 all['msg'] = "Data not found"
                 print(e)
@@ -1247,14 +1253,30 @@ def examdisplay():
         return render_template('examdisplay.html')
     return redirect(url_for('login'))
 
+@app.route('/updateexam', methods=['GET', 'POST'])
+def updateexam():
+    if 'loggedin' in session and session['authority'] == 'examcoordinator':
+        import addmarks
+        cols = session['examupdate']['cols'][3:]
+        newmarks = {}
+        for i in cols:
+            temp = request.form.getlist(i)
+            newmarks[i] = temp
+
+        tablename = session['examupdate']['tname']
+        roll = session['examupdate']['roll']
+        addmarks.update_mark(tablename, newmarks, roll)
+        return redirect(url_for('examdisplay'))
+    return redirect(url_for('login'))
+
 
 @app.route('/examdelete', methods=['GET', 'POST'])
 def examdelete():
     if 'loggedin' in session and session['authority'] == 'examcoordinator':
-        marks = mysql.connector.connect(
-            user='root', password='', host='localhost', database='marks_cse')
-        markCur = marks.cursor()
         if request.method == 'POST':
+            marks = mysql.connector.connect(
+                user='root', password='', host='localhost', database='marks_cse')
+            markCur = marks.cursor()
             all = {}
             year = request.form.get('year')
             div = request.form.get('division')

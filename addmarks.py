@@ -41,3 +41,20 @@ def addmarks(file_path, exam, year, div):
         marks.commit()
 
     marks.close()
+
+
+
+def update_mark(tablename, newmarks, roll):
+    marks = mysql.connector.connect(
+        user='root', password='', host='localhost', database='marks_cse')
+    markCur = marks.cursor()
+
+    for k in newmarks:
+        for n in range(len(roll)):
+            sql = "UPDATE `{}` SET `{}`='{}' WHERE `ROLL`='{}'".format(
+                tablename, k, newmarks[k][n], roll[n])
+            print(tablename, k, newmarks[k][n], roll[n])
+            markCur.execute(sql)
+
+    marks.commit()
+    marks.close()
