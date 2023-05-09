@@ -805,7 +805,7 @@ def searchStudentOther():
             roll = []
             for i in data:
                 roll.append(i[0])
-            session['roll'] = roll
+            session['othroll'] = roll
         return render_template('addAttendanceOther.html', data=total_data)
     return redirect(url_for('login'))
 
@@ -816,7 +816,7 @@ def addOtherAttendance():
         import addAttendance
         count = request.form.getlist('count')
         addAttendance.addOtherAttendance(
-            session['searchother'], count, session['roll'])
+            session['searchother'], count, session['othroll'])
         return redirect(url_for('theoryAttendance'))
     return redirect(url_for('login'))
 
@@ -1047,7 +1047,7 @@ def searchStud_theory():
             roll = []
             for i in data:
                 roll.append(i[0])
-            session['roll'] = roll
+            session['throll'] = roll
         return render_template('addAttendance.html', data=total_data)
     return redirect(url_for('login'))
 
@@ -1058,15 +1058,14 @@ def addAttendance():
         import addAttendance
         if request.method == 'POST':
             present = request.form.getlist('present')
-            # print(session['roll'])
             if session['attype'] == 'Regular':
                 addAttendance.addAttendance_theory(
-                    session['searchtheory'], present, session['roll'])
+                    session['searchtheory'], present, session['throll'])
             elif session['attype'] == 'Addition':
                 addAttendance.addDoubleAttendance_theory(
-                    session['searchtheory'], present, session['roll'])
+                    session['searchtheory'], present, session['throll'])
             addAttendance.addattendance_daily(
-                session['searchtheory'], present, session['roll'], "Theory")
+                session['searchtheory'], present, session['throll'], "Theory")
         return redirect(url_for('theoryAttendance'))
     return redirect(url_for('login'))
 
@@ -1124,7 +1123,7 @@ def searchstudents_practical():
             roll = []
             for i in data:
                 roll.append(i[0])
-            session['roll'] = roll
+            session['prroll'] = roll
             print(total_data)
         return render_template('addAttendancePractical.html', data=total_data)
     return redirect(url_for('login'))
@@ -1136,12 +1135,11 @@ def addAttendance__practical():
         import addAttendance
         if request.method == 'POST':
             present = request.form.getlist('present')
-            # print(session['roll'])
             # print(session['searchpractical'])
             addAttendance.addAttendance_practical(
-                session['searchpractical'], present, session['roll'])
+                session['searchpractical'], present, session['prroll'])
             addAttendance.addattendance_daily(
-                session['searchpractical'], present, session['roll'], "Practical")
+                session['searchpractical'], present, session['prroll'], "Practical")
         return redirect(url_for('practicalAttendance'))
     return redirect(url_for('login'))
 
@@ -1252,6 +1250,7 @@ def examdisplay():
             return render_template('examdisplayTable.html', data=all)
         return render_template('examdisplay.html')
     return redirect(url_for('login'))
+
 
 @app.route('/updateexam', methods=['GET', 'POST'])
 def updateexam():

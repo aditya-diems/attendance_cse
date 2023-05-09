@@ -62,21 +62,25 @@ def getleccount(subs):
                             for tit in range(len(cols)):
                                 cols[tit] = cols[tit][0]
                             cols = cols[4:]
-                            tempcount = 0
-                            for fig in cols:
-                                sql = "SELECT `{}` from `{}` WHERE `division`='{}'".format(
-                                    fig, l, j)
-                                btechP.execute(sql)
-                                data = btechP.fetchall()
-                                for zz in range(len(data)):
-                                    data[zz] = data[zz][0]
-                                if any(tenz > 0 for tenz in data):
-                                    tempcount += max(data)
+                            tp = []
+                            for m in subs[i][j][k][l]:
+                                tempcount = 0
+                                for fig in cols:
+                                    sql = "SELECT `{}` from `{}` WHERE `batch`='{}'".format(
+                                        fig, l, m)
+                                    btechP.execute(sql)
+                                    data = btechP.fetchall()
+                                    for zz in range(len(data)):
+                                        data[zz] = data[zz][0]
+                                    if any(tenz > 0 for tenz in data):
+                                        tempcount += max(data)
+                                tp.append(tempcount)
+
                             if j in count:
-                                count[j][l] = tempcount
+                                count[j][l] = tp
                             else:
                                 count[j] = {}
-                                count[j][l] = tempcount
+                                count[j][l] = tp
 
                     elif i == 'TY':
                         if k == 'THEORY':
@@ -110,21 +114,25 @@ def getleccount(subs):
                             for tit in range(len(cols)):
                                 cols[tit] = cols[tit][0]
                             cols = cols[4:]
-                            tempcount = 0
-                            for fig in cols:
-                                sql = "SELECT `{}` from `{}` WHERE `division`='{}'".format(
-                                    fig, l, j)
-                                tyP.execute(sql)
-                                data = tyP.fetchall()
-                                for zz in range(len(data)):
-                                    data[zz] = data[zz][0]
-                                if any(tenz > 0 for tenz in data):
-                                    tempcount += max(data)
+                            tp = []
+                            for m in subs[i][j][k][l]:
+                                tempcount = 0
+                                for fig in cols:
+                                    sql = "SELECT `{}` from `{}` WHERE `batch`='{}'".format(
+                                        fig, l, m)
+                                    btechP.execute(sql)
+                                    data = btechP.fetchall()
+                                    for zz in range(len(data)):
+                                        data[zz] = data[zz][0]
+                                    if any(tenz > 0 for tenz in data):
+                                        tempcount += max(data)
+                                tp.append(tempcount)
+
                             if j in count:
-                                count[j][l] = tempcount
+                                count[j][l] = tp
                             else:
                                 count[j] = {}
-                                count[j][l] = tempcount
+                                count[j][l] = tp
 
                     elif i == 'SY':
                         if k == 'THEORY':
@@ -158,21 +166,26 @@ def getleccount(subs):
                             for tit in range(len(cols)):
                                 cols[tit] = cols[tit][0]
                             cols = cols[4:]
-                            tempcount = 0
-                            for fig in cols:
-                                sql = "SELECT `{}` from `{}` WHERE `division`='{}'".format(
-                                    fig, l, j)
-                                syP.execute(sql)
-                                data = syP.fetchall()
-                                for zz in range(len(data)):
-                                    data[zz] = data[zz][0]
-                                if any(tenz > 0 for tenz in data):
-                                    tempcount += max(data)
+                            tp = []
+                            for m in subs[i][j][k][l]:
+                                tempcount = 0
+                                for fig in cols:
+                                    sql = "SELECT `{}` from `{}` WHERE `batch`='{}'".format(
+                                        fig, l, m)
+                                    btechP.execute(sql)
+                                    data = btechP.fetchall()
+                                    for zz in range(len(data)):
+                                        data[zz] = data[zz][0]
+                                    if any(tenz > 0 for tenz in data):
+                                        tempcount += max(data)
+                                tp.append(tempcount)
+
                             if j in count:
-                                count[j][l] = tempcount
+                                count[j][l] = tp
                             else:
                                 count[j] = {}
-                                count[j][l] = tempcount
+                                count[j][l] = tp
+
     at_btech.close()
     at_sy.close()
     at_ty.close()
