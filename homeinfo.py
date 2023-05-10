@@ -120,8 +120,8 @@ def getleccount(subs):
                                 for fig in cols:
                                     sql = "SELECT `{}` from `{}` WHERE `batch`='{}'".format(
                                         fig, l, m)
-                                    btechP.execute(sql)
-                                    data = btechP.fetchall()
+                                    tyP.execute(sql)
+                                    data = tyP.fetchall()
                                     for zz in range(len(data)):
                                         data[zz] = data[zz][0]
                                     if any(tenz > 0 for tenz in data):
@@ -172,8 +172,8 @@ def getleccount(subs):
                                 for fig in cols:
                                     sql = "SELECT `{}` from `{}` WHERE `batch`='{}'".format(
                                         fig, l, m)
-                                    btechP.execute(sql)
-                                    data = btechP.fetchall()
+                                    syP.execute(sql)
+                                    data = syP.fetchall()
                                     for zz in range(len(data)):
                                         data[zz] = data[zz][0]
                                     if any(tenz > 0 for tenz in data):
