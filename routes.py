@@ -182,51 +182,51 @@ def forgetPass():
     return render_template('forgetPass.html', msg=msg)
 
 
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    logindbs = mysql.connector.connect(
-        user='root', password='', host='localhost', database='logincse')
-    lo_cur = logindbs.cursor()
-    # Output message if something goes wrong...
-    msg = ''
-    # Check if "username", "password" and "email" POST requests exist (user submitted form)
-    if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:
-        # Create variables for easy access
-        id = request.form['id']
-        authoritiy = request.form['authoritiy']
-        username = request.form['username']
-        password = request.form['password']
-        email = request.form['email']
-        # print(username,password,email,authorities)
+# @app.route('/register', methods=['GET', 'POST'])
+# def register():
+#     logindbs = mysql.connector.connect(
+#         user='root', password='', host='localhost', database='logincse')
+#     lo_cur = logindbs.cursor()
+#     # Output message if something goes wrong...
+#     msg = ''
+#     # Check if "username", "password" and "email" POST requests exist (user submitted form)
+#     if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:
+#         # Create variables for easy access
+#         id = request.form['id']
+#         authoritiy = request.form['authoritiy']
+#         username = request.form['username']
+#         password = request.form['password']
+#         email = request.form['email']
+#         # print(username,password,email,authorities)
 
-        sql = 'SELECT * FROM account WHERE username = "{}"'.format(username)
-        lo_cur.execute(sql)
-        account = lo_cur.fetchall()
+#         sql = 'SELECT * FROM account WHERE username = "{}"'.format(username)
+#         lo_cur.execute(sql)
+#         account = lo_cur.fetchall()
 
-        if account:
-            msg = 'Account already exists!'
-        elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
-            msg = 'Invalid email address!'
-        elif not re.match(r'[A-Za-z0-9]+', username):
-            msg = 'Username must contain only characters and numbers!'
-        elif not username or not password or not email:
-            msg = 'Please fill out the form!'
-        else:
-            # Account doesnt exists and the form data is valid, now insert new account into accounts table
-            sub = '{"BTECH":{"A":{"THEORY":{},"PRACTICAL":{}},"B":{"THEORY":{},"PRACTICAL":{}}},"TY":{"A":{"THEORY":{},"PRACTICAL":{}},"B":{"THEORY":{},"PRACTICAL":{}}},"SY":{"A":{"THEORY":{},"PRACTICAL":{}},"B":{"THEORY":{},"PRACTICAL":{}}}}'
-            obj.accept(id, username, {"Theory": [],
-                       "Practical": []}, authoritiy)
-            lo_cur.execute('INSERT INTO account VALUES (%s, %s, %s, %s, %s, %s)',
-                           (id, authoritiy, username, password, email, sub))
-            logindbs.commit()
-            logindbs.close()
-            msg = 'You have successfully registered!'
+#         if account:
+#             msg = 'Account already exists!'
+#         elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
+#             msg = 'Invalid email address!'
+#         elif not re.match(r'[A-Za-z0-9]+', username):
+#             msg = 'Username must contain only characters and numbers!'
+#         elif not username or not password or not email:
+#             msg = 'Please fill out the form!'
+#         else:
+#             # Account doesnt exists and the form data is valid, now insert new account into accounts table
+#             sub = '{"BTECH":{"A":{"THEORY":{},"PRACTICAL":{}},"B":{"THEORY":{},"PRACTICAL":{}}},"TY":{"A":{"THEORY":{},"PRACTICAL":{}},"B":{"THEORY":{},"PRACTICAL":{}}},"SY":{"A":{"THEORY":{},"PRACTICAL":{}},"B":{"THEORY":{},"PRACTICAL":{}}}}'
+#             obj.accept(id, username, {"Theory": [],
+#                        "Practical": []}, authoritiy)
+#             lo_cur.execute('INSERT INTO account VALUES (%s, %s, %s, %s, %s, %s)',
+#                            (id, authoritiy, username, password, email, sub))
+#             logindbs.commit()
+#             msg = 'You have successfully registered!'
 
-    elif request.method == 'POST':
-        # Form is empty... (no POST data)
-        msg = 'Please fill out the form!'
-    # Show registration form with message (if any)
-    return render_template('register.html', msg=msg)
+#     elif request.method == 'POST':
+#         # Form is empty... (no POST data)
+#         msg = 'Please fill out the form!'
+#     # Show registration form with message (if any)
+#     logindbs.close()
+#     return render_template('register.html', msg=msg)
 
 
 @app.route('/logout')
@@ -529,10 +529,11 @@ def registerFaculty():
             user='root', password='', host='localhost', database='logincse')
         lo_cur = logindbs.cursor()
         id = request.form['id']
+        authoritiy = request.form['authoritiy']
         username = request.form['username']
         password = request.form['password']
         email = request.form['email']
-        print(username, password, email)
+        # print(username,password,email,authorities)
 
         sql = 'SELECT * FROM account WHERE username = "{}"'.format(username)
         lo_cur.execute(sql)
@@ -548,15 +549,18 @@ def registerFaculty():
             msg = 'Please fill out the form!'
         else:
             # Account doesnt exists and the form data is valid, now insert new account into accounts table
-            obj.accept(id, username, {"Theory": [], "Practical": []})
-            lo_cur.execute('INSERT INTO account VALUES (%s, %s, %s, %s)',
-                           (id, username, password, email,))
+            sub = '{"BTECH":{"A":{"THEORY":{},"PRACTICAL":{}},"B":{"THEORY":{},"PRACTICAL":{}}},"TY":{"A":{"THEORY":{},"PRACTICAL":{}},"B":{"THEORY":{},"PRACTICAL":{}}},"SY":{"A":{"THEORY":{},"PRACTICAL":{}},"B":{"THEORY":{},"PRACTICAL":{}}}}'
+            obj.accept(id, username, {"Theory": [],
+                       "Practical": []}, authoritiy)
+            lo_cur.execute('INSERT INTO account VALUES (%s, %s, %s, %s, %s, %s)',
+                           (id, authoritiy, username, password, email, sub))
             logindbs.commit()
-        logindbs.close()
+            msg = 'You have successfully registered!'
     elif request.method == 'POST':
         # Form is empty... (no POST data)
         msg = 'Please fill out the form!'
 
+    logindbs.close()
     return redirect(url_for('manageFaculty'))
 
 
