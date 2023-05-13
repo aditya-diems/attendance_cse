@@ -6,11 +6,11 @@ import mysql.connector
 
 def addOtherAttendance(data, count, roll):
     at_btech = mysql.connector.connect(
-        user='root', password='', host='localhost', database='theory_btech')
+        user='root', password='mousehead@2931', host='localhost', database='theory_btech')
     at_ty = mysql.connector.connect(
-        user='root', password='', host='localhost', database='theory_ty')
+        user='root', password='mousehead@2931', host='localhost', database='theory_ty')
     at_sy = mysql.connector.connect(
-        user='root', password='', host='localhost', database='theory_sy')
+        user='root', password='mousehead@2931', host='localhost', database='theory_sy')
 
     btech = at_btech.cursor()
     ty = at_ty.cursor()
@@ -155,7 +155,7 @@ def addOtherAttendance(data, count, roll):
 
 def addattendance_daily(data, present, roll, torp):
     dcse = mysql.connector.connect(
-        user='root', password='', host='localhost', database='daily_cse')
+        user='root', password='mousehead@2931', host='localhost', database='daily_cse')
     dcse_cur = dcse.cursor()
     cur = mysql_stud.connection.cursor()
 
@@ -413,11 +413,11 @@ def addattendance_daily(data, present, roll, torp):
 
 def addAttendance_theory(data, present, roll):
     at_btech = mysql.connector.connect(
-        user='root', password='', host='localhost', database='theory_btech')
+        user='root', password='mousehead@2931', host='localhost', database='theory_btech')
     at_ty = mysql.connector.connect(
-        user='root', password='', host='localhost', database='theory_ty')
+        user='root', password='mousehead@2931', host='localhost', database='theory_ty')
     at_sy = mysql.connector.connect(
-        user='root', password='', host='localhost', database='theory_sy')
+        user='root', password='mousehead@2931', host='localhost', database='theory_sy')
 
     btech = at_btech.cursor()
     ty = at_ty.cursor()
@@ -560,11 +560,11 @@ def addAttendance_theory(data, present, roll):
 
 def addDoubleAttendance_theory(data, present, roll):
     at_btech = mysql.connector.connect(
-        user='root', password='', host='localhost', database='theory_btech')
+        user='root', password='mousehead@2931', host='localhost', database='theory_btech')
     at_ty = mysql.connector.connect(
-        user='root', password='', host='localhost', database='theory_ty')
+        user='root', password='mousehead@2931', host='localhost', database='theory_ty')
     at_sy = mysql.connector.connect(
-        user='root', password='', host='localhost', database='theory_sy')
+        user='root', password='mousehead@2931', host='localhost', database='theory_sy')
 
     btech = at_btech.cursor()
     ty = at_ty.cursor()
@@ -616,11 +616,11 @@ def addDoubleAttendance_theory(data, present, roll):
 
 def addAttendance_practical(data, present, roll):
     ap_btech = mysql.connector.connect(
-        user='root', password='', host='localhost', database='practical_btech')
+        user='root', password='mousehead@2931', host='localhost', database='practical_btech')
     ap_ty = mysql.connector.connect(
-        user='root', password='', host='localhost', database='practical_ty')
+        user='root', password='mousehead@2931', host='localhost', database='practical_ty')
     ap_sy = mysql.connector.connect(
-        user='root', password='', host='localhost', database='practical_sy')
+        user='root', password='mousehead@2931', host='localhost', database='practical_sy')
 
     btechP = ap_btech.cursor()
     tyP = ap_ty.cursor()

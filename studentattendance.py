@@ -10,11 +10,11 @@ fs = 'C:/Users/windows_10/Desktop/Super/attendance_cse/subinfo.pkl'
 
 def studenttAttendance_theory(roll, year, subject):
     at_btech = mysql.connector.connect(
-        user='root', password='', host='localhost', database='theory_btech')
+        user='root', password='mousehead@2931', host='localhost', database='theory_btech')
     at_ty = mysql.connector.connect(
-        user='root', password='', host='localhost', database='theory_ty')
+        user='root', password='mousehead@2931', host='localhost', database='theory_ty')
     at_sy = mysql.connector.connect(
-        user='root', password='', host='localhost', database='theory_sy')
+        user='root', password='mousehead@2931', host='localhost', database='theory_sy')
 
     btech = at_btech.cursor()
     ty = at_ty.cursor()
@@ -126,11 +126,11 @@ def studenttAttendance_theory(roll, year, subject):
 
 def studenttAttendance_practical(roll, year, subject):
     ap_btech = mysql.connector.connect(
-        user='root', password='', host='localhost', database='practical_btech')
+        user='root', password='mousehead@2931', host='localhost', database='practical_btech')
     ap_ty = mysql.connector.connect(
-        user='root', password='', host='localhost', database='practical_ty')
+        user='root', password='mousehead@2931', host='localhost', database='practical_ty')
     ap_sy = mysql.connector.connect(
-        user='root', password='', host='localhost', database='practical_sy')
+        user='root', password='mousehead@2931', host='localhost', database='practical_sy')
     btechP = ap_btech.cursor()
     tyP = ap_ty.cursor()
     syP = ap_sy.cursor()
@@ -244,21 +244,21 @@ def studenttAttendance_practical(roll, year, subject):
 
 def studenttAttendance_defaulter(roll, year):
     at_btech = mysql.connector.connect(
-        user='root', password='', host='localhost', database='theory_btech')
+        user='root', password='mousehead@2931', host='localhost', database='theory_btech')
     at_ty = mysql.connector.connect(
-        user='root', password='', host='localhost', database='theory_ty')
+        user='root', password='mousehead@2931', host='localhost', database='theory_ty')
     at_sy = mysql.connector.connect(
-        user='root', password='', host='localhost', database='theory_sy')
+        user='root', password='mousehead@2931', host='localhost', database='theory_sy')
     btech = at_btech.cursor()
     ty = at_ty.cursor()
     sy = at_sy.cursor()
 
     ap_btech = mysql.connector.connect(
-        user='root', password='', host='localhost', database='practical_btech')
+        user='root', password='mousehead@2931', host='localhost', database='practical_btech')
     ap_ty = mysql.connector.connect(
-        user='root', password='', host='localhost', database='practical_ty')
+        user='root', password='mousehead@2931', host='localhost', database='practical_ty')
     ap_sy = mysql.connector.connect(
-        user='root', password='', host='localhost', database='practical_sy')
+        user='root', password='mousehead@2931', host='localhost', database='practical_sy')
     btechP = ap_btech.cursor()
     tyP = ap_ty.cursor()
     syP = ap_sy.cursor()
@@ -683,21 +683,21 @@ def studenttAttendance_defaulter(roll, year):
 
 def studentAttendanceKundli(roll, year):
     at_btech = mysql.connector.connect(
-        user='root', password='', host='localhost', database='theory_btech')
+        user='root', password='mousehead@2931', host='localhost', database='theory_btech')
     at_ty = mysql.connector.connect(
-        user='root', password='', host='localhost', database='theory_ty')
+        user='root', password='mousehead@2931', host='localhost', database='theory_ty')
     at_sy = mysql.connector.connect(
-        user='root', password='', host='localhost', database='theory_sy')
+        user='root', password='mousehead@2931', host='localhost', database='theory_sy')
     btech = at_btech.cursor()
     ty = at_ty.cursor()
     sy = at_sy.cursor()
 
     ap_btech = mysql.connector.connect(
-        user='root', password='', host='localhost', database='practical_btech')
+        user='root', password='mousehead@2931', host='localhost', database='practical_btech')
     ap_ty = mysql.connector.connect(
-        user='root', password='', host='localhost', database='practical_ty')
+        user='root', password='mousehead@2931', host='localhost', database='practical_ty')
     ap_sy = mysql.connector.connect(
-        user='root', password='', host='localhost', database='practical_sy')
+        user='root', password='mousehead@2931', host='localhost', database='practical_sy')
     btechP = ap_btech.cursor()
     tyP = ap_ty.cursor()
     syP = ap_sy.cursor()
@@ -1122,21 +1122,21 @@ def studentAttendanceKundli(roll, year):
 
 def studentAttendanceDatewise(roll, year, sdate, edate):
     at_btech = mysql.connector.connect(
-        user='root', password='', host='localhost', database='theory_btech')
+        user='root', password='mousehead@2931', host='localhost', database='theory_btech')
     at_ty = mysql.connector.connect(
-        user='root', password='', host='localhost', database='theory_ty')
+        user='root', password='mousehead@2931', host='localhost', database='theory_ty')
     at_sy = mysql.connector.connect(
-        user='root', password='', host='localhost', database='theory_sy')
+        user='root', password='mousehead@2931', host='localhost', database='theory_sy')
     btech = at_btech.cursor()
     ty = at_ty.cursor()
     sy = at_sy.cursor()
 
     ap_btech = mysql.connector.connect(
-        user='root', password='', host='localhost', database='practical_btech')
+        user='root', password='mousehead@2931', host='localhost', database='practical_btech')
     ap_ty = mysql.connector.connect(
-        user='root', password='', host='localhost', database='practical_ty')
+        user='root', password='mousehead@2931', host='localhost', database='practical_ty')
     ap_sy = mysql.connector.connect(
-        user='root', password='', host='localhost', database='practical_sy')
+        user='root', password='mousehead@2931', host='localhost', database='practical_sy')
     btechP = ap_btech.cursor()
     tyP = ap_ty.cursor()
     syP = ap_sy.cursor()

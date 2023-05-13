@@ -7,7 +7,7 @@ import pickle
 
 def removeFaculty(fc, id):
     logindbs = mysql.connector.connect(
-        user='root', password='', host='localhost', database='logincse')
+        user='root', password='mousehead@2931', host='localhost', database='logincse')
     lo_cur = logindbs.cursor()
     sql = "DELETE FROM `account` WHERE `id` = {}".format(id)
     lo_cur.execute(sql)

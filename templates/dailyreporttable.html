@@ -28,9 +28,8 @@
         .Name {
           width: 300px;
         }
-        
       }
-      
+
       table {
         page-break-inside: auto;
       }
@@ -194,7 +193,30 @@
               >
             </div>
           </li>
-
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle active"
+              href="#"
+              id="navbarDropdownMenuLink"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Edit Attendance
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a
+                class="dropdown-item"
+                href="{{url_for('editTheoryAttendance')}}"
+                >Theory</a
+              >
+              <a
+                class="dropdown-item"
+                href="{{url_for('editPracticalAttendance')}}"
+                >Practical</a
+              >
+            </div>
+          </li>
           <li class="nav-item">
             <a class="nav-link active" href="{{ url_for('dailyreport') }}"
               >Daily Report</a
@@ -277,7 +299,7 @@
                     {% for cell in range(data['len']) %}
                     <td>{{row[cell]}}</td>
                     {% endfor %}
-                    <td style="width: 150px;">
+                    <td style="width: 150px">
                       <input
                         type="text"
                         name="sphone"
@@ -285,7 +307,7 @@
                         class="form-control"
                       />
                     </td>
-                    <td style="width: 150px;">
+                    <td style="width: 150px">
                       <input
                         type="text"
                         name="pphone"
@@ -293,7 +315,7 @@
                         class="form-control"
                       />
                     </td>
-                    <td style="width: 150px;">
+                    <td style="width: 150px">
                       <input
                         type="text"
                         name="remark"
@@ -308,7 +330,7 @@
                     {% for cell in range(data['len']) %}
                     <td>{{row[cell]}}</td>
                     {% endfor %}
-                    <td style="width: 150px;">
+                    <td style="width: 150px">
                       <input
                         type="text"
                         name="sphone"
@@ -316,7 +338,7 @@
                         class="form-control"
                       />
                     </td>
-                    <td style="width: 150px;">
+                    <td style="width: 150px">
                       <input
                         type="text"
                         name="pphone"
@@ -324,7 +346,7 @@
                         class="form-control"
                       />
                     </td>
-                    <td style="width: 150px;">
+                    <td style="width: 150px">
                       <input
                         type="text"
                         name="remark"

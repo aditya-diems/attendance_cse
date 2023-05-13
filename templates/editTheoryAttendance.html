@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Take Attendance</title>
+    <title>Edit Attendance</title>
     <meta charset="utf-8" />
     <!-- Mobile Specific Metas -->
     <meta
@@ -92,7 +92,7 @@
     <!-- navbar start -->
 
     <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="#">CSE Attendance</a>
+      <a class="navbar-brand" href="#">Attendance</a>
 
       <button
         class="navbar-toggler"
@@ -113,7 +113,7 @@
           </li>
           <li class="nav-item dropdown">
             <a
-              class="nav-link dropdown-toggle active"
+              class="nav-link dropdown-toggle"
               href="#"
               id="navbarDropdownMenuLink"
               data-toggle="dropdown"
@@ -199,11 +199,11 @@
     <!-- navbar ends -->
 
     <div class="row d-flex justify-content-center">
-      <div class="col-xl-7 col-lg-8 col-md-9 col-11 text-center">
+      <div class="col-xl-5 col-lg-8 col-md-9 col-11 text-center">
         <div class="card">
-          <h5 class="text-center mb-4">Theory Attendance</h5>
+          <h5 class="text-center mb-4">Edit Theory Attendance</h5>
           <form
-            action="{{url_for('searchStud_theory')}}"
+            action="{{url_for('edit_searchstudents_theory')}}"
             method="POST"
             enctype="multipart/form-data"
           >
@@ -242,7 +242,6 @@
                   </select>
                 </div>
               </div>
-
               <div class="col">
                 <div class="form-group text-left">
                   <label for="checkboxes-container">Batch</label>
@@ -261,28 +260,6 @@
                     class="form-control"
                     required
                   />
-                </div>
-              </div>
-              <div class="col">
-                <div class="form-group text-left">
-                  <label for="timeslot">Time slot</label>
-                  <select name="timeslot" id="timeslot" class="form-control">
-                    <option value="10:15">10:15</option>
-                    <option value="11:15">11:15</option>
-                    <option value="1:15">1:15</option>
-                    <option value="2:15">2:15</option>
-                    <option value="3:30">3:30</option>
-                    <option value="4:30">4:30</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col">
-                <div class="form-group text-left">
-                  <label for="attype">Attendance Type</label>
-                  <select name="attype" id="attype" class="form-control">
-                    <option value="Regular">Regular</option>
-                    <option value="Addition">Addition</option>
-                  </select>
                 </div>
               </div>
             </div>
