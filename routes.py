@@ -1061,15 +1061,18 @@ def addAttendance():
     if 'loggedin' in session and session['authority'] == 'Faculty':
         import addAttendance
         if request.method == 'POST':
-            present = request.form.getlist('present')
+            session['thpresent'] = request.form.getlist('present')
             if session['attype'] == 'Regular':
                 addAttendance.addAttendance_theory(
-                    session['searchtheory'], present, session['throll'])
+                    session['searchtheory'], session['thpresent'], session['throll'])
+                addAttendance.addattendance_daily(
+                    session['searchtheory'], session['thpresent'], session['throll'], "Theory")
+
             elif session['attype'] == 'Addition':
                 addAttendance.addDoubleAttendance_theory(
-                    session['searchtheory'], present, session['throll'])
-            addAttendance.addattendance_daily(
-                session['searchtheory'], present, session['throll'], "Theory")
+                    session['searchtheory'], session['thpresent'], session['throll'])
+                addAttendance.addattendance_daily(
+                    session['searchtheory'], session['thpresent'], session['throll'], "Theory")
         return redirect(url_for('theoryAttendance'))
     return redirect(url_for('login'))
 
@@ -1131,9 +1134,9 @@ def edit_addattendance():
     if 'loggedin' in session and session['authority'] == 'Faculty':
         import editAttendance
         if request.method == 'POST':
-            present = request.form.getlist('present')
+            session['editthpresent'] = request.form.getlist('present')
             editAttendance.editattendance(
-                present, session['edit_searchtheory'])
+                session['editthpresent'], session['edit_searchtheory'])
         return redirect(url_for('editTheoryAttendance'))
     return redirect(url_for('login'))
 
@@ -1194,9 +1197,9 @@ def edit_addAttendance__practical():
     if 'loggedin' in session and session['authority'] == 'Faculty':
         import editAttendance
         if request.method == 'POST':
-            present = request.form.getlist('present')
+            session['editprpresent'] = request.form.getlist('present')
             editAttendance.editattendancePractical(
-                present, session['edit_searchpractical'])
+                session['editprpresent'], session['edit_searchpractical'])
         return redirect(url_for('editPracticalAttendance'))
     return redirect(url_for('login'))
 
@@ -1264,12 +1267,12 @@ def addAttendance__practical():
     if 'loggedin' in session and session['authority'] == 'Faculty':
         import addAttendance
         if request.method == 'POST':
-            present = request.form.getlist('present')
+            session['prpresent'] = request.form.getlist('present')
             # print(session['searchpractical'])
             addAttendance.addAttendance_practical(
-                session['searchpractical'], present, session['prroll'])
+                session['searchpractical'], session['prpresent'], session['prroll'])
             addAttendance.addattendance_daily(
-                session['searchpractical'], present, session['prroll'], "Practical")
+                session['searchpractical'], session['prpresent'], session['prroll'], "Practical")
         return redirect(url_for('practicalAttendance'))
     return redirect(url_for('login'))
 
