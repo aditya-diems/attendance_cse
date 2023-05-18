@@ -433,12 +433,12 @@ def studenttAttendance_defaulter(roll, year):
                 data = ty.fetchall()
                 sql = 'SELECT `division` FROM `{}` WHERE roll = "{}"'.format(
                     i, roll)
-                btech.execute(sql)
-                div = btech.fetchall()[0][0]
+                ty.execute(sql)
+                div = ty.fetchall()[0][0]
                 sql = 'SELECT {} FROM `{}` WHERE division = "{}"'.format(
                     j, i, div)
-                btech.execute(sql)
-                all = btech.fetchall()
+                ty.execute(sql)
+                all = ty.fetchall()
                 for reko in range(len(all)):
                     all[reko] = all[reko][0]
                 try:
@@ -568,12 +568,12 @@ def studenttAttendance_defaulter(roll, year):
                 data = sy.fetchall()
                 sql = 'SELECT `division` FROM `{}` WHERE roll = "{}"'.format(
                     i, roll)
-                btech.execute(sql)
-                div = btech.fetchall()[0][0]
+                sy.execute(sql)
+                div = sy.fetchall()[0][0]
                 sql = 'SELECT {} FROM `{}` WHERE division = "{}"'.format(
                     j, i, div)
-                btech.execute(sql)
-                all = btech.fetchall()
+                sy.execute(sql)
+                all = sy.fetchall()
                 for reko in range(len(all)):
                     all[reko] = all[reko][0]
                 try:

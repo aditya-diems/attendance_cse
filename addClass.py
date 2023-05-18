@@ -106,7 +106,6 @@ def addLoginInfo(roll, name, year):
     password = str(roll)
     email = year+'@gmail.com'
     sub = '[]'
-    print(type(authoritiy), type(username), type(password), type(email))
     lo_cur.execute('INSERT INTO account VALUES (%s, %s, %s, %s, %s, %s)',
                    (roll, authoritiy, username, password, email, sub))
     logindbs.commit()
@@ -120,14 +119,14 @@ def parseCSV(filePath, year, div):
     print(csvData)
     for i, row in csvData.iterrows():
         try:
-            sql = "INSERT INTO " + year + \
-                " (ROLL_NO, NAME, YEAR, DIVISION, BATCH, SPHONE, PPHONE) VALUES (%s, %s, %s, %s, %s, %s, %s)"
-            value = (row['roll'], row['name'], year, div,
-                     row['batch'], row['sphone'], row['pphone'])
-            cur.execute(sql, value)
-            mysql_stud.connection.commit()
-            addInSubject(row['roll'], row['name'], year, div)
-            addInPractical(row['roll'], row['name'], year, div, row['batch'])
+            # sql = "INSERT INTO " + year + \
+            #     " (ROLL_NO, NAME, YEAR, DIVISION, BATCH, SPHONE, PPHONE) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+            # value = (row['roll'], row['name'], year, div,
+            #          row['batch'], row['sphone'], row['pphone'])
+            # cur.execute(sql, value)
+            # mysql_stud.connection.commit()
+            # addInSubject(row['roll'], row['name'], year, div)
+            # addInPractical(row['roll'], row['name'], year, div, row['batch'])
             addLoginInfo(row['roll'], row['name'], year)
         except:
             print('PRN already exist')
