@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Take Attendance</title>
+    <title>Student Marks</title>
     <meta charset="utf-8" />
     <!-- Mobile Specific Metas -->
     <meta
@@ -64,6 +64,8 @@
         outline-width: 0;
       }
     </style>
+    <link rel="stylesheet" href="css/bootstrap.css" />
+
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
@@ -85,8 +87,6 @@
       integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
       crossorigin="anonymous"
     ></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script type="text/javascript" src="static/js/table2excel.js"></script>
   </head>
 
   <body class="form-v10">
@@ -110,7 +110,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+            <a class="nav-link" href="{{ url_for('studentHome') }}">Home</a>
           </li>
           <li class="nav-item dropdown">
             <a
@@ -121,143 +121,92 @@
               aria-haspopup="true"
               aria-expanded="false"
             >
-              Take Attendance
+              Attendance
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="{{url_for('theoryAttendance')}}"
+              <a class="dropdown-item" href="{{url_for('studenttheory')}}"
                 >Theory</a
               >
-              <a class="dropdown-item" href="{{url_for('practicalAttendance')}}"
-                >Practical</a
-              >
-              <a class="dropdown-item" href="{{ url_for('other') }}">Other</a>
-            </div>
-          </li>
-
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle active"
-              href="#"
-              id="navbarDropdownMenuLink"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              Attendance Record
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a
-                class="dropdown-item"
-                href="{{url_for('subjectAttendance_theory')}}"
-                >Theory</a
-              >
-              <a
-                class="dropdown-item"
-                href="{{url_for('subjectAttendance_practical')}}"
-                >Practical</a
-              >
-              <a class="dropdown-item" href="{{url_for('classAttendance')}}"
-                >Class</a
-              >
-              <a class="dropdown-item" href="{{url_for('defaulter')}}"
-                >Defaulter</a
-              >
-            </div>
-          </li>
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle active"
-              href="#"
-              id="navbarDropdownMenuLink"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              Edit Attendance
-            </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a
-                class="dropdown-item"
-                href="{{url_for('editTheoryAttendance')}}"
-                >Theory</a
-              >
-              <a
-                class="dropdown-item"
-                href="{{url_for('editPracticalAttendance')}}"
+              <a class="dropdown-item" href="{{url_for('studentpractical')}}"
                 >Practical</a
               >
             </div>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('dailyreport') }}"
-              >Daily Report</a
+            <a class="nav-link" href="{{ url_for('studentdefaulter') }}"
+              >Defaulter</a
             >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('facultygrievance') }}"
+            <a class="nav-link active" href="{{ url_for('studentmarks') }}"
+              >Marks</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('studentgrievances') }}"
               >Grievance</a
             >
           </li>
         </ul>
-        <a class="nav-link" href="{{ url_for('profile') }}">Profile</a>
+        <a class="nav-link" href="{{ url_for('studentprofile') }}">Profile</a>
       </div>
     </nav>
 
     <!-- navbar ends -->
 
-    <!-- table starts   -->
     <div class="row d-flex justify-content-center">
-      <div class="col-xl-12 col-lg-8 col-md-9 col-11">
+      <div class="col-xl-10 col-lg-8 col-md-9 col-11">
         <div class="card text-center">
-          <h4 class="text-center mb-4">Attendance By Class</h4>
-          <div class="row">
-            <div class="col">
-              <h5>Year : {{data['pre'][0]}}</h5>
-            </div>
-            <div class="col">
-              <h5>Division : {{data['pre'][1]}}</h5>
-            </div>
-            <div class="col">
-              <h5>From : <b>{{data['pre'][2]}}</b></h5>
-            </div>
-            <div class="col">
-              <h5>To : <b>{{data['pre'][3]}}</b></h5>
-            </div>
-          </div>
-          <table
-            class="table table-responsive table-bordered"
-            style="height: 500px"
-          >
-            <thead class="thead-dark" style="position: sticky; top: 0">
-              <tr>
-                <th scope="col">ROLL NO</th>
-                <th scope="col">NAME</th>
-                <th scope="col">DIV</th>
-                {% for i in data['subs'] %}
+          <h4 class="text-center mb-4">MARKS</h4>
+          <li class="list-group-item list-group-item-dark text-left">
+            <h6>CA1 -</h6>
+            <table class="table table-light table-responsive-md table-bordered">
+              <thead class="thead-dark">
+                {% for i in data['CA1'][1] %}
                 <th>{{i}}</th>
                 {% endfor %}
-              </tr>
-            </thead>
-            <tbody>
-              {% for row in data['roll'] %}
-              <tr>
-                {% for cell in row %}
-                <td>{{cell}}</td>
+              </thead>
+              <tbody class="">
+                {% for i in data['CA1'][0] %}
+                <td>{{i}}</td>
                 {% endfor %}
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </li>
+          <hr />
+          <li class="list-group-item list-group-item-dark text-left">
+            <h6>MID SEM -</h6>
+            <table class="table table-light table-responsive-md table-bordered">
+              <thead class="thead-dark">
+                {% for i in data['MIDSEM'][1] %}
+                <th>{{i}}</th>
+                {% endfor %}
+              </thead>
+              <tbody class="">
+                {% for i in data['MIDSEM'][0] %}
+                <td>{{i}}</td>
+                {% endfor %}
+              </tbody>
+            </table>
+          </li>
+          <hr />
+          <li class="list-group-item list-group-item-dark text-left">
+            <h6>CA2 -</h6>
+            <table class="table table-light table-responsive-md table-bordered">
+              <thead class="thead-dark">
+                {% for i in data['CA2'][1] %}
+                <th>{{i}}</th>
+                {% endfor %}
+              </thead>
+              <tbody class="">
+                {% for i in data['CA2'][0] %}
+                <td>{{i}}</td>
+                {% endfor %}
+              </tbody>
+            </table>
+          </li>
         </div>
       </div>
     </div>
-
-    <!-- table ends -->
-    <script>
-      function tableToExcel() {
-        var table2excel = new Table2Excel();
-        table2excel.export(document.querySelectorAll("table.table"));
-      }
-    </script>
   </body>
 </html>

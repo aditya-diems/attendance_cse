@@ -203,15 +203,20 @@ def cleanmarks(year):
     tbs = markCur.fetchall()
     delete = []
     for i in tbs:
-        temp = i[0].split('-')
-        print(temp)
-        if temp[1] == year.lower():
-            delete.append(i[0])
-    print(delete)
+        if i[0] == 'grievance':
+            pass
+        else:
+            temp = i[0].split('-')
+            print(temp)
+            if temp[1] == year.lower():
+                delete.append(i[0])
     for i in delete:
         sql = 'DROP TABLE `{}`'.format(i)
         markCur.execute(sql)
         marks.commit()
+    sql = "TRUNCATE `grievance`"
+    markCur.execute(sql)
+    marks.commit()
     marks.close()
 
 

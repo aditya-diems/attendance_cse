@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Take Attendance</title>
+    <title>Grievance</title>
     <meta charset="utf-8" />
     <!-- Mobile Specific Metas -->
     <meta
@@ -89,11 +89,9 @@
     <script type="text/javascript" src="static/js/table2excel.js"></script>
   </head>
 
-  <body class="form-v10">
-    <!-- navbar start -->
-
+  <body>
     <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="#">CSE Attendance</a>
+      <a class="navbar-brand" href="#">Attendance</a>
 
       <button
         class="navbar-toggler"
@@ -136,7 +134,7 @@
 
           <li class="nav-item dropdown">
             <a
-              class="nav-link dropdown-toggle active"
+              class="nav-link dropdown-toggle"
               href="#"
               id="navbarDropdownMenuLink"
               data-toggle="dropdown"
@@ -166,7 +164,7 @@
           </li>
           <li class="nav-item dropdown">
             <a
-              class="nav-link dropdown-toggle active"
+              class="nav-link dropdown-toggle"
               href="#"
               id="navbarDropdownMenuLink"
               data-toggle="dropdown"
@@ -188,76 +186,139 @@
               >
             </div>
           </li>
+
           <li class="nav-item">
             <a class="nav-link" href="{{ url_for('dailyreport') }}"
               >Daily Report</a
             >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('facultygrievance') }}"
+            <a class="nav-link active" href="{{ url_for('facultygrievance') }}"
               >Grievance</a
             >
           </li>
         </ul>
-        <a class="nav-link" href="{{ url_for('profile') }}">Profile</a>
+        <a
+          style="color: #007bff"
+          class="nav-link"
+          href="{{ url_for('profile') }}"
+          >Profile</a
+        >
       </div>
     </nav>
 
-    <!-- navbar ends -->
-
-    <!-- table starts   -->
     <div class="row d-flex justify-content-center">
-      <div class="col-xl-12 col-lg-8 col-md-9 col-11">
-        <div class="card text-center">
-          <h4 class="text-center mb-4">Attendance By Class</h4>
-          <div class="row">
-            <div class="col">
-              <h5>Year : {{data['pre'][0]}}</h5>
-            </div>
-            <div class="col">
-              <h5>Division : {{data['pre'][1]}}</h5>
-            </div>
-            <div class="col">
-              <h5>From : <b>{{data['pre'][2]}}</b></h5>
-            </div>
-            <div class="col">
-              <h5>To : <b>{{data['pre'][3]}}</b></h5>
-            </div>
-          </div>
-          <table
-            class="table table-responsive table-bordered"
-            style="height: 500px"
+      <div class="col-xl-7 col-lg-8 col-md-9 col-11 text-center">
+        <div class="card">
+          <h4>Grievance Applications</h4>
+          <br />
+          <form
+            action="{{url_for('facultygriavancestatus')}}"
+            method="POST"
+            enctype="multipart/form-data"
+            onsubmit="return confirm('Are you sure?')"
           >
-            <thead class="thead-dark" style="position: sticky; top: 0">
-              <tr>
-                <th scope="col">ROLL NO</th>
-                <th scope="col">NAME</th>
-                <th scope="col">DIV</th>
-                {% for i in data['subs'] %}
+            <table class="table table-light table-responsive-md table-bordered">
+              <thead class="thead-dark">
+                {% for i in data['col'] %}
                 <th>{{i}}</th>
                 {% endfor %}
-              </tr>
+                <th>Check</th>
+              </thead>
+              <tbody>
+                {% for i in range(data['applications']|length) %} {% if
+                data['applications'][i][-1] == 'Remaining' %}
+                <tr>
+                  {% for j in data['applications'][i] %}
+                  <td>{{j}}</td>
+                  {% else %} {% endfor %}
+                  <td>
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="checkbox"
+                        value="{{data['applications'][i][0]}}/{{data['applications'][i][1]}}/{{data['applications'][i][2]}}/{{data['applications'][i][3]}}/{{data['applications'][i][4]}}/{{data['applications'][i][5]}}"
+                        id="flexCheckDefault"
+                        name="status"
+                      />
+                    </div>
+                  </td>
+                </tr>
+                {% endif %} {% endfor %}
+              </tbody>
+            </table>
+            <div class="row">
+              <div class="col">
+                <input
+                  id="submitForm"
+                  value="ACCEPT"
+                  name="action"
+                  type="submit"
+                  class="btn btn-success btn-block rounded-pill shadow-sm"
+                />
+              </div>
+              <div class="col">
+                <input
+                  id="submitForm"
+                  value="REJECT"
+                  name="action"
+                  type="submit"
+                  class="btn btn-danger btn-block rounded-pill shadow-sm"
+                />
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="row d-flex justify-content-center">
+      <div class="col-xl-6 col-lg-8 col-md-9 col-11 text-center">
+        <div class="card">
+          <h4>Accepted Grievance Applications</h4>
+          <br />
+          <table class="table table-light table-responsive-md table-bordered">
+            <thead class="thead-dark">
+              {% for i in data['col'] %}
+              <th>{{i}}</th>
+              {% endfor %}
             </thead>
             <tbody>
-              {% for row in data['roll'] %}
-              <tr>
-                {% for cell in row %}
-                <td>{{cell}}</td>
-                {% endfor %}
+              {% for i in range(data['applications']|length) %} {% if
+              data['applications'][i][-1] == 'Accepted' %}
+              <tr class="table-success">
+                {% for j in data['applications'][i] %}
+                <td>{{j}}</td>
+                {% else %} {% endfor %}
               </tr>
+              {% endif %} {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-xl-6 col-lg-8 col-md-9 col-11 text-center">
+        <div class="card">
+          <h4>Rejected Grievance Applications</h4>
+          <br />
+          <table class="table table-light table-responsive-md table-bordered">
+            <thead class="thead-dark">
+              {% for i in data['col'] %}
+              <th>{{i}}</th>
               {% endfor %}
+            </thead>
+            <tbody>
+              {% for i in range(data['applications']|length) %} {% if
+              data['applications'][i][-1] == 'Rejected' %}
+              <tr class="table-danger">
+                {% for j in data['applications'][i] %}
+                <td>{{j}}</td>
+                {% else %} {% endfor %}
+              </tr>
+              {% endif %} {% endfor %}
             </tbody>
           </table>
         </div>
       </div>
     </div>
-
-    <!-- table ends -->
-    <script>
-      function tableToExcel() {
-        var table2excel = new Table2Excel();
-        table2excel.export(document.querySelectorAll("table.table"));
-      }
-    </script>
   </body>
 </html>
