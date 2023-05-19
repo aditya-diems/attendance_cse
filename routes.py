@@ -232,11 +232,13 @@ def forgetPass():
 @app.route('/logout')
 def logout():
     # Remove session data, this will log the user out
-    session.pop('loggedin', None)
-    session.pop('id', None)
-    session.pop('usrename', None)
-    session.pop('authority', None)
-    # Redirect to login page
+    if 'loggedin' in session:
+        session.pop('loggedin', None)
+        session.pop('id', None)
+        session.pop('usrename', None)
+        session.pop('authority', None)
+        session.clear()
+        return redirect(url_for('login'))
     return redirect(url_for('login'))
 
 
@@ -786,7 +788,7 @@ def other():
         print(newdic)
         logindbs.close()
         return render_template('other.html', data=newdic)
-    redirect(url_for('login'))
+    return redirect(url_for('login'))
 
 
 @app.route('/searchstudentother', methods=['GET', 'POST'])
