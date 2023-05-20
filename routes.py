@@ -121,10 +121,11 @@ def login():
         print(lo_cur.statement)
         account = lo_cur.fetchall()
         print(account)
-        if password == account[0][3]:
-            pass
-        else:
-            account = []
+        if account:
+            if password == account[0][3]:
+                pass
+            else:
+                account = []
         logindbs.close()
         if account:
             # Create session data, we can access this data in other routes
