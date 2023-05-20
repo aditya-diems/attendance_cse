@@ -113,12 +113,18 @@ def login():
         # Create variables for easy access
         username = request.form['username']
         password = request.form['password']
+        username = username.split()[0]
         # print(type(username),type(password))
-        sql = 'SELECT * FROM account WHERE username = "{}" and password= "{}"'.format(
-            username, password)
-        lo_cur.execute(sql)
+        sql = "SELECT * FROM account WHERE username = %s "
+        val = (username,)
+        lo_cur.execute(sql, val)
+        print(lo_cur.statement)
         account = lo_cur.fetchall()
         print(account)
+        if password == account[0][3]:
+            pass
+        else:
+            account = []
         logindbs.close()
         if account:
             # Create session data, we can access this data in other routes
