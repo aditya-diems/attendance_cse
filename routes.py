@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, redirect, url_for, session
 from addClass import *
 from flask_mysqldb import MySQL
 from flask_mail import Mail, Message
-from flask_paranoid import Paranoid
 import mysql.connector
 import os
 import re
@@ -78,18 +77,8 @@ print(ls)
 obj = Faculty(0, '', {}, '')
 
 app = Flask(__name__)
-
-app.config.update(
-    SESSION_COOKIE_SECURE=True,
-    DEBUG=True,
-    REMEMBER_COOKIE_SECURE=True,
-    SESSION_COOKIE_HTTPONLY=True,
-    REMEMBER_COOKIE_HTTPONLY=True
-)
-paranoid = Paranoid(app)
-paranoid.redirect_view = '/'
-
 app.secret_key = 'your secret key'
+
 
 # for the student database
 app.config["MYSQL_HOST"] = "localhost"
@@ -149,14 +138,8 @@ def login():
             elif session['authority'] == 'master':
                 return redirect(url_for('masterHome'))
             elif session['authority'] == 'student':
-                cur = mysql_stud.connection.cursor()
                 year = account[0][4].split('@')[0]
                 session['year'] = year
-                sql = "SELECT `DIVISION` FROM `{}` WHERE `ROLL_NO`='{}'".format(
-                    year, session['id'])
-                cur.execute(sql)
-                div = cur.fetchone()
-                session['division'] = div[0]
                 return redirect(url_for('studentHome'))
             else:
                 return redirect(url_for('home'))
@@ -414,59 +397,6 @@ def studentdefaulter():
         total['data'] = studentattendance.studenttAttendance_defaulter(
             roll, year)
         return render_template('studentdefaulter.html', total=total)
-    return redirect(url_for('login'))
-
-
-@app.route('/studentmarks')
-def studentmarks():
-    if 'loggedin' in session and session['authority'] == 'student':
-        import studentmarks
-        ca1 = studentmarks.getmarks(
-            'CA1', session['year'], session['division'], session['id'])
-        midsem = studentmarks.getmarks(
-            'MIDSEM', session['year'], session['division'], session['id'])
-        ca2 = studentmarks.getmarks(
-            'CA2', session['year'], session['division'], session['id'])
-        session['marks'] = {'CA1': ca1,
-                            'MIDSEM': midsem, 'CA2': ca2}
-        return render_template('studentmarks.html', data=session['marks'])
-    return redirect(url_for('login'))
-
-
-@app.route('/studentgrievances', methods=['GET', 'POST'])
-def studentgrievances():
-    if 'loggedin' in session and session['authority'] == 'student':
-        if request.method == 'POST':
-            marks = mysql.connector.connect(
-                user='root', password='mousehead@2931', host='localhost', database='marks')
-            markCur = marks.cursor()
-            session['grievance'] = [request.form.get('examtype'), request.form.get(
-                'subject'), request.form.get('grievancemarks')]
-            sql = "INSERT INTO `grievance` (`Roll`, `Examtype`,`Year`,`Division`, `Subject`, `Marks`) VALUES ('{}','{}','{}','{}','{}','{}')".format(
-                session['id'], session['grievance'][0], session['year'], session['division'], session['grievance'][1], session['grievance'][2])
-            markCur.execute(sql)
-            marks.commit()
-            marks.close()
-            return redirect(url_for('studentgrievances'))
-        else:
-            marks = mysql.connector.connect(
-                user='root', password='mousehead@2931', host='localhost', database='marks')
-            markCur = marks.cursor()
-            total = {}
-            total['subs'] = subs['Theory'][session['year']]
-            sql = "SELECT * FROM `grievance` WHERE `Roll`='{}'".format(
-                session['id'])
-            markCur.execute(sql)
-            total['data'] = markCur.fetchall()
-            sql = "SHOW COLUMNS FROM `grievance`"
-            markCur.execute(sql)
-            cols = markCur.fetchall()
-            column = []
-            for i in cols:
-                column.append(i[0])
-            total['col'] = column
-            marks.close()
-            return render_template('studentgrievances.html', total=total)
     return redirect(url_for('login'))
 
 
@@ -1381,85 +1311,9 @@ def updatedailyreport():
         return redirect(url_for('dailyreport'))
     return redirect(url_for('login'))
 
-
-@app.route('/facultygrievance')
-def facultygrievance():
-    if 'loggedin' in session and session['authority'] == 'Faculty':
-        logindbs = mysql.connector.connect(
-            user='root', password='mousehead@2931', host='localhost', database='login')
-        lo_cur = logindbs.cursor()
-        marks = mysql.connector.connect(
-            user='root', password='mousehead@2931', host='localhost', database='marks')
-        markCur = marks.cursor()
-        sql = "SELECT * FROM `account` WHERE `authorities` = 'Faculty'"
-        lo_cur.execute(sql)
-        dt = lo_cur.fetchall()
-        for i in dt:
-            if i[2] == session['username']:
-                subs = json.loads(i[-1])
-        newsub = []
-        newsubwithdiv = {}
-        for i in subs:
-            for j in subs[i]:
-                for k in subs[i][j]['THEORY']:
-                    if k not in newsub:
-                        newsub.append(k)
-                    if k not in newsubwithdiv:
-                        newsubwithdiv[k] = []
-                        newsubwithdiv[k].append(j)
-                    else:
-                        newsubwithdiv[k].append(j)
-        griapplications = []
-        for i in newsub:
-            for k in newsubwithdiv[i]:
-                sql = "SELECT * FROM `grievance` WHERE `Subject`='{}' AND `Division`='{}'".format(
-                    i, k)
-                markCur.execute(sql)
-                data = markCur.fetchall()
-                for k in data:
-                    griapplications.append(k)
-
-        sql = "SHOW COLUMNS FROM `grievance`"
-        markCur.execute(sql)
-        cols = markCur.fetchall()
-        column = []
-        for i in cols:
-            column.append(i[0])
-
-        applications = {'applications': griapplications, 'col': column}
-        logindbs.close()
-        marks.close()
-        return render_template('facultygrievance.html', data=applications)
-    return redirect(url_for('login'))
-
-
-@app.route('/facultygriavancestatus', methods=['GET', 'POST'])
-def facultygriavancestatus():
-    if 'loggedin' in session and session['authority'] == 'Faculty':
-        import studentmarks
-        if request.form['action'] == 'ACCEPT':
-            status = request.form.getlist('status')
-            for m in status:
-                k = m.split('/')
-                print(k)
-                studentmarks.allowgrievances(
-                    k[0], k[1], k[2], k[3], k[4], k[5])
-
-        if request.form['action'] == 'REJECT':
-            status = request.form.getlist('status')
-            for m in status:
-                k = m.split('/')
-                print(k)
-                studentmarks.rejectgrievances(
-                    k[0], k[1], k[2], k[3], k[4], k[5])
-
-        return redirect(url_for('facultygrievance'))
-    return redirect(url_for('login'))
-
-
-
-
 # for marks coordinator login
+
+
 @app.route('/examhome')
 def examhome():
     if 'loggedin' in session and session['authority'] == 'examcoordinator':
