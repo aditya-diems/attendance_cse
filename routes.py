@@ -312,10 +312,12 @@ def masterclean():
 
 @app.route('/cleandata', methods=['GET', 'POST'])
 def cleandata():
-    import cleandata
-    year = request.form.get('year')
-    cleandata.cleandata(year)
-    return redirect(url_for('masterclean'))
+    if 'loggedin' in session and session['authority'] == 'master':
+        import cleandata
+        year = request.form.get('year')
+        cleandata.cleandata(year)
+        return redirect(url_for('masterclean'))
+    return redirect(url_for('login'))
 
 
 # student Pages ------------------------------------------------------------
@@ -502,88 +504,98 @@ def selectSubject():
 
 @app.route('/assignSubjectFaculty', methods=['GET', 'POST'])
 def assignSubjectFaculty():
-    import managefaculty
-    if request.method == 'POST':
-        divs = request.form.getlist('division')
-        br = request.form.getlist('branch')
-        managefaculty.assignSubjectToFaculty(divs, br, session['fcdetails'])
-    return redirect(url_for('manageFaculty'))
+    if 'loggedin' in session and session['authority'] == 'yearcoordinator' or session['authority'] == 'admin':
+        import managefaculty
+        if request.method == 'POST':
+            divs = request.form.getlist('division')
+            br = request.form.getlist('branch')
+            managefaculty.assignSubjectToFaculty(
+                divs, br, session['fcdetails'])
+        return redirect(url_for('manageFaculty'))
+    return redirect(url_for('login'))
 
 
 @app.route('/assignSubject', methods=['GET', 'POST'])
 def assignSubject():
-    subs_th = request.form.getlist('subs_th')
-    subs_pr = request.form.getlist('subs_pr')
-    fc = session['fc']
-    print(subs_th, subs_pr)
+    if 'loggedin' in session and session['authority'] == 'yearcoordinator' or session['authority'] == 'admin':
+        subs_th = request.form.getlist('subs_th')
+        subs_pr = request.form.getlist('subs_pr')
+        fc = session['fc']
+        print(subs_th, subs_pr)
 
-    for i in ls:
-        if i.name == fc:
-            i.subject['Theory'] = subs_th
-            i.subject['Practical'] = subs_pr
+        for i in ls:
+            if i.name == fc:
+                i.subject['Theory'] = subs_th
+                i.subject['Practical'] = subs_pr
 
-    fwobj = open(f, 'wb')
-    pickle.dump(ls, fwobj)
-    return redirect(url_for('manageFaculty'))
+        fwobj = open(f, 'wb')
+        pickle.dump(ls, fwobj)
+        return redirect(url_for('manageFaculty'))
+    return redirect(url_for('login'))
 
 
 @app.route('/registerFaculty', methods=['GET', 'POST'])
 def registerFaculty():
-    # Output message if something goes wrong...
-    msg = ''
-    # Check if "username", "password" and "email" POST requests exist (user submitted form)
-    if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:
-        # Create variables for easy access
-        logindbs = mysql.connector.connect(
-            user='root', password='mousehead@2931', host='localhost', database='logincse')
-        lo_cur = logindbs.cursor()
-        id = request.form['id']
-        authoritiy = request.form['authoritiy']
-        username = request.form['username']
-        password = request.form['password']
-        email = request.form['email']
-        # print(username,password,email,authorities)
+    if 'loggedin' in session and session['authority'] == 'yearcoordinator' or session['authority'] == 'admin':
+        # Output message if something goes wrong...
+        msg = ''
+        # Check if "username", "password" and "email" POST requests exist (user submitted form)
+        if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:
+            logindbs = mysql.connector.connect(
+                user='root', password='root@123', host='localhost', database='login')
+            lo_cur = logindbs.cursor()
+            # Create variables for easy access
+            id = request.form['id']
+            authoritiy = request.form['authoritiy']
+            username = request.form['username']
+            password = request.form['password']
+            email = request.form['email']
 
-        sql = 'SELECT * FROM account WHERE username = "{}"'.format(username)
-        lo_cur.execute(sql)
-        account = lo_cur.fetchall()
+            sql = 'SELECT * FROM account WHERE username = "{}"'.format(
+                username)
+            lo_cur.execute(sql)
+            account = lo_cur.fetchall()
 
-        if account:
-            msg = 'Account already exists!'
-        elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
-            msg = 'Invalid email address!'
-        elif not re.match(r'[A-Za-z0-9]+', username):
-            msg = 'Username must contain only characters and numbers!'
-        elif not username or not password or not email:
+            if account:
+                msg = 'Account already exists!'
+            elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
+                msg = 'Invalid email address!'
+            elif not re.match(r'[A-Za-z0-9]+', username):
+                msg = 'Username must contain only characters and numbers!'
+            elif not username or not password or not email:
+                msg = 'Please fill out the form!'
+            else:
+                # Account doesnt exists and the form data is valid, now insert new account into accounts table
+                sub = '{"BTECH":{"A":{"THEORY":{},"PRACTICAL":{}},"B":{"THEORY":{},"PRACTICAL":{}}},"TY":{"A":{"THEORY":{},"PRACTICAL":{}},"B":{"THEORY":{},"PRACTICAL":{}}},"SY":{"A":{"THEORY":{},"PRACTICAL":{}},"B":{"THEORY":{},"PRACTICAL":{}}}}'
+                obj.accept(id, username, {"Theory": [],
+                                          "Practical": []}, authoritiy)
+                lo_cur.execute('INSERT INTO account VALUES (%s, %s, %s, %s, %s, %s)',
+                               (id, authoritiy, username, password, email, sub))
+                logindbs.commit()
+                msg = 'You have successfully registered!'
+                logindbs.commit()
+
+        elif request.method == 'POST':
             msg = 'Please fill out the form!'
-        else:
-            # Account doesnt exists and the form data is valid, now insert new account into accounts table
-            sub = '{"BTECH":{"A":{"THEORY":{},"PRACTICAL":{}},"B":{"THEORY":{},"PRACTICAL":{}}},"TY":{"A":{"THEORY":{},"PRACTICAL":{}},"B":{"THEORY":{},"PRACTICAL":{}}},"SY":{"A":{"THEORY":{},"PRACTICAL":{}},"B":{"THEORY":{},"PRACTICAL":{}}}}'
-            obj.accept(id, username, {"Theory": [],
-                       "Practical": []}, authoritiy)
-            lo_cur.execute('INSERT INTO account VALUES (%s, %s, %s, %s, %s, %s)',
-                           (id, authoritiy, username, password, email, sub))
-            logindbs.commit()
-            msg = 'You have successfully registered!'
-    elif request.method == 'POST':
-        # Form is empty... (no POST data)
-        msg = 'Please fill out the form!'
 
-    logindbs.close()
-    return redirect(url_for('manageFaculty'))
+        logindbs.close()
+        return redirect(url_for('manageFaculty'))
+    return redirect(url_for('login'))
 
 
 @app.route('/removeFaculty', methods=['GET', 'POST'])
 def removeFaculty():
-    import removeFaculty
-    faculty = request.form.get('faculty')
-    id = None
-    for i in ls:
-        if i.name == faculty:
-            id = i.id
-    removeFaculty.removeFaculty(faculty, id)
-    obj.delete(faculty)
-    return redirect(url_for('manageFaculty'))
+    if 'loggedin' in session and session['authority'] == 'yearcoordinator' or session['authority'] == 'admin':
+        import removeFaculty
+        faculty = request.form.get('faculty')
+        id = None
+        for i in ls:
+            if i.name == faculty:
+                id = i.id
+        removeFaculty.removeFaculty(faculty, id)
+        obj.delete(faculty)
+        return redirect(url_for('manageFaculty'))
+    return redirect(url_for('login'))
 
 
 # --------------------------------------------------------------------------------
