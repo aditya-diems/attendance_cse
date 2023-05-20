@@ -164,9 +164,9 @@ def forgetPass():
     msg = ''
     if request.method == 'POST':
         username = request.form['username']
-        sql = 'SELECT * FROM account WHERE username = "{}"'.format(
-            username)
-        lo_cur.execute(sql)
+        sql = 'SELECT * FROM account WHERE username = %s'
+        val = (username,)
+        lo_cur.execute(sql, val)
         account = lo_cur.fetchall()
         if account:
             auth = account[0][1]
