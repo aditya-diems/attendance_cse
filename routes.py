@@ -80,7 +80,7 @@ obj = Faculty(0, '', {}, '')
 app = Flask(__name__)
 
 app.config.update(
-    SESSION_COOKIE_SECURE=True,
+    # SESSION_COOKIE_SECURE=True,
     DEBUG=True,
     REMEMBER_COOKIE_SECURE=True,
     SESSION_COOKIE_HTTPONLY=True,
@@ -447,7 +447,7 @@ def studentgrievances():
     if 'loggedin' in session and session['authority'] == 'student':
         if request.method == 'POST':
             marks = mysql.connector.connect(
-                user='root', password='mousehead@2931', host='localhost', database='marks')
+                user='root', password='mousehead@2931', host='localhost', database='marks_cse')
             markCur = marks.cursor()
             session['grievance'] = [request.form.get('examtype'), request.form.get(
                 'subject'), request.form.get('grievancemarks')]
@@ -459,7 +459,7 @@ def studentgrievances():
             return redirect(url_for('studentgrievances'))
         else:
             marks = mysql.connector.connect(
-                user='root', password='mousehead@2931', host='localhost', database='marks')
+                user='root', password='mousehead@2931', host='localhost', database='marks_cse')
             markCur = marks.cursor()
             total = {}
             total['subs'] = subs['Theory'][session['year']]
@@ -482,7 +482,7 @@ def studentgrievances():
 # Admin Pages -----------------------------------------------------------------
 @app.route('/adminHome')
 def adminHome():
-    if 'loggedin' in session and session['authority'] == 'yearcoordinator' or session['authority'] == 'admin':
+    if 'loggedin' in session and ((session['authority'] == 'yearcoordinator' or session['authority'] == 'admin')):
         name = []
         subs = []
         for i in ls:
@@ -499,7 +499,7 @@ def adminHome():
 
 @app.route('/manageFaculty')
 def manageFaculty():
-    if 'loggedin' in session and session['authority'] == 'yearcoordinator' or session['authority'] == 'admin':
+    if 'loggedin' in session and ((session['authority'] == 'yearcoordinator' or session['authority'] == 'admin')):
         faculty = []
         logindbs = mysql.connector.connect(
             user='root', password='mousehead@2931', host='localhost', database='logincse')
@@ -519,7 +519,7 @@ def manageFaculty():
 
 @app.route('/selectSubject', methods=['GET', 'POST'])
 def selectSubject():
-    if 'loggedin' in session and session['authority'] == 'yearcoordinator' or session['authority'] == 'admin':
+    if 'loggedin' in session and (session['authority'] == 'yearcoordinator' or session['authority'] == 'admin'):
         fsub = open(fs, 'rb')
         subs = pickle.load(fsub)
 
@@ -574,7 +574,7 @@ def selectSubject():
 
 @app.route('/assignSubjectFaculty', methods=['GET', 'POST'])
 def assignSubjectFaculty():
-    if 'loggedin' in session and session['authority'] == 'yearcoordinator' or session['authority'] == 'admin':
+    if 'loggedin' in session and (session['authority'] == 'yearcoordinator' or session['authority'] == 'admin'):
         import managefaculty
         if request.method == 'POST':
             divs = request.form.getlist('division')
@@ -587,7 +587,7 @@ def assignSubjectFaculty():
 
 @app.route('/assignSubject', methods=['GET', 'POST'])
 def assignSubject():
-    if 'loggedin' in session and session['authority'] == 'yearcoordinator' or session['authority'] == 'admin':
+    if 'loggedin' in session and (session['authority'] == 'yearcoordinator' or session['authority'] == 'admin'):
         subs_th = request.form.getlist('subs_th')
         subs_pr = request.form.getlist('subs_pr')
         fc = session['fc']
@@ -606,13 +606,13 @@ def assignSubject():
 
 @app.route('/registerFaculty', methods=['GET', 'POST'])
 def registerFaculty():
-    if 'loggedin' in session and session['authority'] == 'yearcoordinator' or session['authority'] == 'admin':
+    if 'loggedin' in session and (session['authority'] == 'yearcoordinator' or session['authority'] == 'admin'):
         # Output message if something goes wrong...
         msg = ''
         # Check if "username", "password" and "email" POST requests exist (user submitted form)
         if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:
             logindbs = mysql.connector.connect(
-                user='root', password='root@123', host='localhost', database='login')
+                user='root', password='root@123', host='localhost', database='logincse')
             lo_cur = logindbs.cursor()
             # Create variables for easy access
             id = request.form['id']
@@ -655,7 +655,7 @@ def registerFaculty():
 
 @app.route('/removeFaculty', methods=['GET', 'POST'])
 def removeFaculty():
-    if 'loggedin' in session and session['authority'] == 'yearcoordinator' or session['authority'] == 'admin':
+    if 'loggedin' in session and (session['authority'] == 'yearcoordinator' or session['authority'] == 'admin'):
         import removeFaculty
         faculty = request.form.get('faculty')
         id = None
@@ -671,7 +671,7 @@ def removeFaculty():
 # --------------------------------------------------------------------------------
 @app.route('/manageSubject', methods=['GET', 'POST'])
 def manageSubject():
-    if 'loggedin' in session and session['authority'] == 'yearcoordinator' or session['authority'] == 'admin':
+    if 'loggedin' in session and (session['authority'] == 'yearcoordinator' or session['authority'] == 'admin'):
         if request.method == 'POST':
             fsub = open(fs, 'rb')
             subs = pickle.load(fsub)
@@ -690,7 +690,7 @@ def manageSubject():
 
 @app.route('/addsubject', methods=['GET', 'POST'])
 def addSubject():
-    if 'loggedin' in session and session['authority'] == 'yearcoordinator' or session['authority'] == 'admin':
+    if 'loggedin' in session and (session['authority'] == 'yearcoordinator' or session['authority'] == 'admin'):
         import addSubject
         subject = request.form.get('subject')
         year = session['year_for_subject']
@@ -702,7 +702,7 @@ def addSubject():
 
 @app.route('/renamesubject', methods=['GET', 'POST'])
 def renamesubject():
-    if 'loggedin' in session and session['authority'] == 'yearcoordinator' or session['authority'] == 'admin':
+    if 'loggedin' in session and (session['authority'] == 'yearcoordinator' or session['authority'] == 'admin'):
         if request.method == 'POST':
             fsub = open(fs, 'rb')
             subs = pickle.load(fsub)
@@ -721,7 +721,7 @@ def renamesubject():
 
 @app.route('/renamesub', methods=['GET', 'POST'])
 def renamesub():
-    if 'loggedin' in session and session['authority'] == 'yearcoordinator' or session['authority'] == 'admin':
+    if 'loggedin' in session and (session['authority'] == 'yearcoordinator' or session['authority'] == 'admin'):
         import addSubject
         delsub = request.form.getlist('rename')
         year = session['yeardelete']
@@ -735,7 +735,7 @@ def renamesub():
 
 @app.route('/adminProfile')
 def adminProfile():
-    if 'loggedin' in session and session['authority'] == 'yearcoordinator' or session['authority'] == 'admin':
+    if 'loggedin' in session and (session['authority'] == 'yearcoordinator' or session['authority'] == 'admin'):
         logindbs = mysql.connector.connect(
             user='root', password='mousehead@2931', host='localhost', database='logincse')
         lo_cur = logindbs.cursor()
@@ -748,7 +748,7 @@ def adminProfile():
 
 @app.route('/deletetheory')
 def deletetheory():
-    if 'loggedin' in session and session['authority'] == 'yearcoordinator' or session['authority'] == 'admin':
+    if 'loggedin' in session and (session['authority'] == 'yearcoordinator' or session['authority'] == 'admin'):
         data = []
         for i in ls:
             if i.name == session['username']:
@@ -759,7 +759,7 @@ def deletetheory():
 
 @app.route('/deletetheoryAttendance', methods=['GET', 'POST'])
 def deletetheoryAttendance():
-    if 'loggedin' in session and session['authority'] == 'yearcoordinator' or session['authority'] == 'admin':
+    if 'loggedin' in session and (session['authority'] == 'yearcoordinator' or session['authority'] == 'admin'):
         import deleteattendance
         year = request.form.get('year')
         division = request.form.get('division')
@@ -774,7 +774,7 @@ def deletetheoryAttendance():
 
 @app.route('/deletepractical')
 def deletepractical():
-    if 'loggedin' in session and session['authority'] == 'yearcoordinator' or session['authority'] == 'admin':
+    if 'loggedin' in session and (session['authority'] == 'yearcoordinator' or session['authority'] == 'admin'):
         data = []
         for i in ls:
             if i.name == session['username']:
@@ -785,7 +785,7 @@ def deletepractical():
 
 @app.route('/deletepracticalAttendance', methods=['GET', 'POST'])
 def deletepracticalAttendance():
-    if 'loggedin' in session and session['authority'] == 'yearcoordinator' or session['authority'] == 'admin':
+    if 'loggedin' in session and (session['authority'] == 'yearcoordinator' or session['authority'] == 'admin'):
         import deleteattendance
         year = request.form.get('year')
         division = request.form.get('division')
@@ -802,14 +802,14 @@ def deletepracticalAttendance():
 # adding class to dataset -----------------------------------------------------------------------------
 @app.route('/addclass')
 def addClass():
-    if 'loggedin' in session and session['authority'] == 'yearcoordinator' or session['authority'] == 'admin':
+    if 'loggedin' in session and (session['authority'] == 'yearcoordinator' or session['authority'] == 'admin'):
         return render_template('addClass.html')
     return redirect(url_for('login'))
 
 
 @app.route('/addclass', methods=['GET', 'POST'])
 def addDataset():
-    if 'loggedin' in session and session['authority'] == 'yearcoordinator' or session['authority'] == 'admin':
+    if 'loggedin' in session and (session['authority'] == 'yearcoordinator' or session['authority'] == 'admin'):
         if request.method == 'POST':
             uploaded_file = request.files['file']
             year = request.form.get('year')
@@ -829,14 +829,14 @@ def addDataset():
 
 @app.route('/addstudent')
 def addStudent():
-    if 'loggedin' in session and session['authority'] == 'yearcoordinator' or session['authority'] == 'admin':
+    if 'loggedin' in session and (session['authority'] == 'yearcoordinator' or session['authority'] == 'admin'):
         return render_template('addStudent.html')
     return redirect(url_for('login'))
 
 
 @app.route('/addstudent', methods=['GET', 'POST'])
 def addStud():
-    if 'loggedin' in session and session['authority'] == 'yearcoordinator' or session['authority'] == 'admin':
+    if 'loggedin' in session and (session['authority'] == 'yearcoordinator' or session['authority'] == 'admin'):
         import addStudentDBS
         if request.method == 'POST':
             roll = request.form.get('roll')
@@ -1063,14 +1063,14 @@ def defaulterTable():
 
 @app.route('/classrecord')
 def classRecord():
-    if 'loggedin' in session and session['authority'] == 'yearcoordinator' or session['authority'] == 'admin':
+    if 'loggedin' in session and (session['authority'] == 'yearcoordinator' or session['authority'] == 'admin'):
         return render_template('classRecord.html')
     return redirect(url_for('login'))
 
 
 @app.route('/showrecord', methods=['GET', 'POST'])
 def showRecord():
-    if 'loggedin' in session and session['authority'] == 'yearcoordinator' or session['authority'] == 'admin':
+    if 'loggedin' in session and (session['authority'] == 'yearcoordinator' or session['authority'] == 'admin'):
         import classRecordDBS
         if request.method == 'POST':
             year = request.form.get('year')
@@ -1405,15 +1405,17 @@ def updatedailyreport():
 def facultygrievance():
     if 'loggedin' in session and session['authority'] == 'Faculty':
         logindbs = mysql.connector.connect(
-            user='root', password='mousehead@2931', host='localhost', database='login')
+            user='root', password='mousehead@2931', host='localhost', database='logincse')
         lo_cur = logindbs.cursor()
         marks = mysql.connector.connect(
-            user='root', password='mousehead@2931', host='localhost', database='marks')
+            user='root', password='mousehead@2931', host='localhost', database='marks_cse')
         markCur = marks.cursor()
         sql = "SELECT * FROM `account` WHERE `authorities` = 'Faculty'"
         lo_cur.execute(sql)
         dt = lo_cur.fetchall()
+        print('username', session['username'])
         for i in dt:
+            print(i)
             if i[2] == session['username']:
                 subs = json.loads(i[-1])
         newsub = []
