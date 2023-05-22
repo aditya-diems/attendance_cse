@@ -3,6 +3,9 @@ from routes import mysql_stud
 import mysql.connector
 import pickle
 import csv
+import sys
+sys.path.append('C:/Users/windows_10/Desktop/Super/attendance_cse')
+
 
 
 def addmarks(file_path, exam, year, div):
