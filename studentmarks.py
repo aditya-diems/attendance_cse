@@ -1,5 +1,4 @@
 import pandas as pd
-from routes import mysql_stud
 import mysql.connector
 import pickle
 import csv
