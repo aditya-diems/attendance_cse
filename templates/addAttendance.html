@@ -166,7 +166,7 @@
           </li>
           <li class="nav-item dropdown">
             <a
-              class="nav-link dropdown-toggle active"
+              class="nav-link dropdown-toggle"
               href="#"
               id="navbarDropdownMenuLink"
               data-toggle="dropdown"
@@ -332,9 +332,7 @@
         $('input[type="checkbox"]').change(function () {
           var total_checked = $("input[name='present']:checked").length;
           $("#d1").html("Present  = " + total_checked);
-          var total_unchecked = $(
-            "input[name='present']:not(:checked)"
-          ).length;
+          var total_unchecked = $("input[name='present']:not(:checked)").length;
           $("#d2").html("Absent  = " + total_unchecked);
         });
 
