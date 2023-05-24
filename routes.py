@@ -612,7 +612,7 @@ def registerFaculty():
         # Check if "username", "password" and "email" POST requests exist (user submitted form)
         if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:
             logindbs = mysql.connector.connect(
-                user='root', password='root@123', host='localhost', database='logincse')
+                user='root', password='mousehead@2931', host='localhost', database='logincse')
             lo_cur = logindbs.cursor()
             # Create variables for easy access
             id = request.form['id']
