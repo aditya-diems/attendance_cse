@@ -66,8 +66,8 @@ def getleccount(subs):
                             for m in subs[i][j][k][l]:
                                 tempcount = 0
                                 for fig in cols:
-                                    sql = "SELECT `{}` from `{}` WHERE `batch`='{}'".format(
-                                        fig, l, m)
+                                    sql = "SELECT `{}` from `{}` WHERE `batch`='{}' AND `division`='{}'".format(
+                                        fig, l, m, j)
                                     btechP.execute(sql)
                                     data = btechP.fetchall()
                                     for zz in range(len(data)):
@@ -118,8 +118,8 @@ def getleccount(subs):
                             for m in subs[i][j][k][l]:
                                 tempcount = 0
                                 for fig in cols:
-                                    sql = "SELECT `{}` from `{}` WHERE `batch`='{}'".format(
-                                        fig, l, m)
+                                    sql = "SELECT `{}` from `{}` WHERE `batch`='{}' AND `division`='{}'".format(
+                                        fig, l, m, j)
                                     tyP.execute(sql)
                                     data = tyP.fetchall()
                                     for zz in range(len(data)):
@@ -170,8 +170,8 @@ def getleccount(subs):
                             for m in subs[i][j][k][l]:
                                 tempcount = 0
                                 for fig in cols:
-                                    sql = "SELECT `{}` from `{}` WHERE `batch`='{}'".format(
-                                        fig, l, m)
+                                    sql = "SELECT `{}` from `{}` WHERE `batch`='{}' AND `division`='{}'".format(
+                                        fig, l, m, j)
                                     syP.execute(sql)
                                     data = syP.fetchall()
                                     for zz in range(len(data)):
