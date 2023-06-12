@@ -1587,9 +1587,10 @@ def examdelete():
             tbs = markCur.fetchall()
             table = []
             for i in range(len(tbs)):
-                temp = tbs[i][0].split('-')
-                if temp[1] == year.lower() and temp[2] == div.lower():
-                    table.append(tbs[i][0])
+                if tbs[i][0] != 'grievance':
+                    temp = tbs[i][0].split('-')
+                    if temp[1] == year.lower() and temp[2] == div.lower():
+                        table.append(tbs[i][0])
             all['tables'] = table
             marks.close()
             return render_template('examdelete1.html', data=all)
